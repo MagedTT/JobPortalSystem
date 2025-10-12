@@ -1,0 +1,37 @@
+@model job_portal_system.Models.ViewModels.JobViewModel
+
+@{
+    ViewData["Title"] = "Delete Job";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-danger text-white rounded-top-4 py-3">
+            <h3 class="mb-0">
+                <i class="bi bi-trash3"></i> Delete Job
+            </h3>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="alert alert-danger rounded-3 mb-4">
+                <strong>Warning:</strong> Are you sure you want to permanently delete this job?
+            </div>
+
+            <div class="border rounded-3 p-4 mb-4 bg-light">
+                <h4 class="fw-bold text-dark">@Model.Title</h4>
+                <p class="text-muted mb-2">@Model.Description</p>
+                <p class="mb-0"><strong>Salary:</strong> @Model.Salary.ToString("C")</p>
+            </div>
+
+            <form asp-action="Delete" method="post" class="d-flex justify-content-end align-items-center">
+                <input type="hidden" asp-for="Id" />
+                <a asp-action="Index" class="btn btn-secondary me-2 px-4 rounded-3">
+                    <i class="bi bi-arrow-left"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-danger px-4 rounded-3">
+                    <i class="bi bi-trash"></i> Confirm Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

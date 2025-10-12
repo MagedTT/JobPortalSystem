@@ -1,0 +1,60 @@
+@model IEnumerable<job_portal_system.Models.ViewModels.JobViewModel>
+
+@{
+    ViewData["Title"] = "All Jobs";
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark">Available Jobs</h2>
+    <a asp-action="Create" class="btn btn-primary shadow-sm px-4">
+        + Post a New Job
+    </a>
+</div>
+
+<div class="table-responsive shadow-sm rounded-3 bg-white p-2">
+    <table class="table align-middle table-hover mb-0">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th class="rounded-start" style="width: 35%;">Title</th>
+                <th style="width: 20%;">Salary</th>
+                <th style="width: 20%;">Posted On</th>
+                <th class="rounded-end" style="width: 25%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4 fs-6">
+                        No jobs available yet.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var job in Model)
+                {
+                    <tr class="text-center">
+                        <td class="fw-semibold text-center ps-3 rounded-start">@job.Title</td>
+                        <td>@job.Salary.ToString("C")</td>
+                        <td>@job.CreatedAt.ToString("dd MMM yyyy")</td>
+                        <td class="rounded-end">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a asp-action="Details" asp-route-id="@job.Id" class="btn btn-outline-info btn-sm px-3">
+                                    Details
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@job.Id" class="btn btn-outline-warning btn-sm px-3">
+                                    Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@job.Id" class="btn btn-outline-danger btn-sm px-3">
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

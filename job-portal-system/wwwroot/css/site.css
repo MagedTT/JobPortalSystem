@@ -1,31 +1,124 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+    background-color: #f8f9fb;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.navbar {
+    background: linear-gradient(135deg, #212529, #343a40);
+    padding: 0.8rem 1rem;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar-nav .nav-link {
+    color: #d1d1d1 !important;
+    margin-left: 1rem;
+    transition: all 0.3s ease;
+}
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+        color: #ffffff !important;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+main.container {
+    flex: 1;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+footer {
+    background: #212529;
+    color: #ccc;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+}
+
+    footer a {
+        color: #0d6efd;
+        text-decoration: none;
+    }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-job {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card-job:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0 6px;
+}
+
+    .table thead th {
+        background-color: #212529;
+        color: #fff;
+        border: none;
+    }
+
+    .table tbody tr {
+        background-color: #fff;
+        transition: all 0.2s ease;
+        border-radius: 10px;
+    }
+
+        .table tbody tr:hover {
+            transform: scale(1.01);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            background-color: #f9fafc;
+        }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+.btn-outline-info, .btn-outline-warning, .btn-outline-danger {
+    border-width: 1.5px;
+}
+
+.card {
+    transition: all 0.2s ease-in-out;
+}
+
+    .card:hover {
+        transform: scale(1.01);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.15);
+}
+
+.btn {
+    border-radius: 8px;
 }

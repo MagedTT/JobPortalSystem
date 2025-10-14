@@ -17,8 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // DbContext
+// var connectionString = Environment.GetEnvironmentVariable("JobPortalSystem_ConnectionString");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Console.WriteLine(connectionString);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IJobService, JobService>();
@@ -38,7 +41,7 @@ builder.Services.AddAutoMapper(cfg =>
 var app = builder.Build();
 
 // Run migrations automatically
-app.Initialize();
+await app.Initialize();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -57,8 +60,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Job}/{action=Index}/{id?}")
+    pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

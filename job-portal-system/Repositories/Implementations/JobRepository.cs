@@ -12,7 +12,7 @@ namespace job_portal_system.Repositories.Implementations
         public async Task<IEnumerable<Job>> GetRecentJobsAsync(int count)
         {
             return await _context.Jobs
-                .OrderByDescending(j => j.CreatedAt)
+                .OrderByDescending(j => j.PostedAt)
                 .Take(count)
                 .ToListAsync();
         }

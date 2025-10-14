@@ -12,8 +12,8 @@ using job_portal_system.Data;
 namespace job_portal_system.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251014180809_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20251014200023_configIdentity")]
+    partial class configIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -213,7 +213,7 @@ namespace job_portal_system.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorys");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("job_portal_system.Models.Domain.Employer", b =>

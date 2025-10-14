@@ -1,0 +1,54 @@
+@model job_portal_system.Models.ViewModels.RegisterEmployeerViewModel
+@{
+    ViewData["Title"] = "Register as Employer";
+}
+
+<link rel="stylesheet" href="~/css/pages/register.css" />
+
+<section class="register-section">
+    <div class="register-card">
+        <h2>Register as Employer</h2>
+
+        <form asp-action="RegisterEmployer" method="post" class="floating-form">
+
+            <div class="form-floating mb-3">
+                <input asp-for="CompanyName" class="form-control" placeholder="Company Name" />
+                <label asp-for="CompanyName">Company Name</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="CompanyEmail" type="email" class="form-control" placeholder="Company Email" />
+                <label asp-for="CompanyEmail">Company Email</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
+                <label asp-for="Password">Password</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
+                <label asp-for="ConfirmPassword">Confirm Password</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Website" class="form-control" placeholder="Company Website" />
+                <label asp-for="Website">Company Website</label>
+            </div>
+
+            <div class="form-floating mb-4">
+                <input asp-for="Industry" class="form-control" placeholder="Industry" />
+                <label asp-for="Industry">Industry</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <small>
+                Already have an account?
+                <a asp-controller="Account" asp-action="Login">Login</a>
+            </small>
+        </div>
+    </div>
+</section>

@@ -1,12 +1,15 @@
+using AutoMapper;
 using job_portal_system.Data;
 using job_portal_system.Mappings;
+using job_portal_system.Models.Domain;
 using job_portal_system.Repositories.Implementations;
 using job_portal_system.Repositories.Interfaces;
 using job_portal_system.Services.Implementations;
 using job_portal_system.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using AutoMapper;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 
 // AutoMapper
 builder.Services.AddAutoMapper(cfg =>

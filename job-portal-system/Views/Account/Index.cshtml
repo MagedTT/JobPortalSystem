@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Register";
+}
+
+<link href="~/css/pages/register.css" rel="stylesheet" />
+
+<section class="register-section">
+    <div class="register-card">
+        <h2 class="fw-bold mb-3">Create Your Account</h2>
+        <p class="text-muted mb-4">Choose your role to continue</p>
+
+        <div class="d-flex flex-column gap-3">
+            <a asp-controller="Account" asp-action="RegisterJobSeeker" class="btn btn-primary py-2">
+                <i class="bi bi-person-fill"></i> Register as Job Seeker
+            </a>
+            <a asp-controller="Account" asp-action="RegisterEmployeer" class="btn btn-outline-primary py-2">
+                <i class="bi bi-building"></i> Register as Employer
+            </a>
+        </div>
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Already have an account?
+                <a asp-controller="Account" asp-action="Login" class="text-decoration-none text-primary fw-semibold login-link">Login</a>
+            </small>
+        </div>
+    </div>
+</section>

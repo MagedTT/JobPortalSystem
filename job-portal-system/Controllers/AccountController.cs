@@ -40,7 +40,6 @@ namespace job_portal_system.Controllers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                //Role = "JobSeeker"
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -67,7 +66,6 @@ namespace job_portal_system.Controllers
             {
                 UserName = model.CompanyEmail,
                 Email = model.CompanyEmail,
-                //Role = "Employer"
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

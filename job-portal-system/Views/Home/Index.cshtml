@@ -1,8 +1,45 @@
-﻿@{
+@using Microsoft.AspNetCore.Identity
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5 text-center">
+    <h2>Welcome to Job Portal System</h2>
+    <hr class="my-4" />
+
+    @if (User?.Identity != null && User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole("Employer"))
+        {
+            <div class="alert alert-primary mt-3 p-3 rounded-4">
+                <h5 class="mb-2">Welcome Employer!</h5>
+                <p>You can post and manage your job listings.</p>
+                <a asp-controller="Job" asp-action="Create" class="btn btn-primary rounded-pill px-4 mt-2">Post a Job</a>
+            </div>
+        }
+        else if (User.IsInRole("JobSeeker"))
+        {
+            <div class="alert alert-success mt-3 p-3 rounded-4">
+                <h5 class="mb-2">Welcome Job Seeker!</h5>
+                <p>You can browse and apply for available jobs.</p>
+                <a asp-controller="Job" asp-action="Index" class="btn btn-success rounded-pill px-4 mt-2">Find Jobs</a>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-secondary mt-3 p-3 rounded-4">
+                <p>Welcome, @User.Identity.Name!</p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-warning mt-4 p-3 rounded-4">
+            <h5 class="mb-2">Welcome to our portal!</h5>
+            <p>
+                Please <a asp-controller="Account" asp-action="Login">login</a> or
+                <a asp-controller="Account" asp-action="Register">create an account</a> to continue.
+            </p>
+        </div>
+    }
 </div>

@@ -1,74 +1,166 @@
-﻿@{
-    var title = ViewData["Title"] ?? "Job Portal";
-}
+@using Microsoft.AspNetCore.Identity
+@using job_portal_system.Models.Domain
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@title - Job Portal</title>
+    <title>@ViewData["Title"] - Job Portal</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
+    <link href="~/css/base.css" rel="stylesheet" />
+    <link href="~/css/layout.css" rel="stylesheet" />
+    <link href="~/css/components.css" rel="stylesheet" />
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-briefcase-fill me-2"></i> Job Portal
-            </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0d1117; border-bottom:1px solid #21262d;">
+            <div class="container-fluid px-5">
+                <!-- Left: Logo -->
+                    <a class="navbar-brand d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 64 64" role="img" aria-labelledby="jobverseTitle jobverseDesc">
+                          <title id="jobverseTitle">Jobverse</title>
+                          <desc id="jobverseDesc">Logo: a planet with an orbit and a briefcase inside, gradient green</desc>
 
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" && ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
-                           asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-house-door"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Job" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"
-                           asp-controller="Job" asp-action="Index">
-                            <i class="bi bi-list-task"></i> Jobs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Create" ? "active" : "")"
-                           asp-controller="Job" asp-action="Create">
-                            <i class="bi bi-plus-circle"></i> Post a Job
-                        </a>
-                    </li>
-                </ul>
+                          <defs>
+                            <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                              <stop offset="0" stop-color="#238636"/>
+                              <stop offset="1" stop-color="#2ea043"/>
+                            </linearGradient>
+                            <filter id="f1" x="-20%" y="-20%" width="140%" height="140%">
+                              <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.25"/>
+                            </filter>
+                          </defs>
+
+                          <circle cx="32" cy="32" r="20" fill="url(#g1)" opacity="0.12"/>
+
+                          <circle cx="32" cy="32" r="16" fill="url(#g1)" filter="url(#f1)"/>
+
+                          <ellipse cx="32" cy="32" rx="22" ry="9" fill="none" stroke="#99f6b6" stroke-opacity="0.18" stroke-width="2" transform="rotate(-24 32 32)"/>
+
+                          <g transform="translate(0,0)">
+                            <rect x="22" y="28" width="20" height="10" rx="1.6" ry="1.6" fill="#0b1220" opacity="0.18"/>
+                            <rect x="22.8" y="28.6" width="18.4" height="9.2" rx="1.2" ry="1.2" fill="#ffffff" opacity="0.08"/>
+
+                            <rect x="23.6" y="27.8" width="16.8" height="8.4" rx="1.2" ry="1.2" fill="none" stroke="url(#g1)" stroke-width="1.6"/>
+
+                            <path d="M27.2 26.4 h9.6 a1.2 1.2 0 0 1 1.2 1.2 v0.4" fill="none" stroke="url(#g1)" stroke-width="1.6" stroke-linecap="round"/>
+
+                            <rect x="30.6" y="30.6" width="2.8" height="3.2" rx="0.6" fill="url(#g1)"/>
+                          </g>
+
+                          <g transform="translate(13,14)" fill="#f8f9fa" opacity="0.95">
+                            <path d="M2 0 L2.6 1.8 L4.6 2.2 L2.6 2.6 L2 4.4 L1.4 2.6 L-0.6 2.2 L1.4 1.8 Z" transform="scale(1.6)"/>
+                          </g>
+
+                          <circle cx="48.5" cy="18.5" r="0.9" fill="#c8f0d0" opacity="0.9"/>
+                          <circle cx="50.8" cy="30.2" r="0.6" fill="#e6ffef" opacity="0.8"/>
+                        </svg>
+                        <span class="fw-semibold text-light">Jobverse</span>
+                    </a>
+
+                <!-- Toggler -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <i class="bi bi-list text-light fs-3"></i>
+                </button>
+
+                <!-- Middle + Right -->
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <!-- Middle: Links -->
+                    <ul class="navbar-nav ms-3 me-auto d-flex align-items-center gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link px-3 d-flex align-items-center gap-1" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 d-flex align-items-center gap-1" asp-controller="Jobs" asp-action="Index">
+                                <i class="bi bi-briefcase"></i> Jobs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 d-flex align-items-center gap-1" asp-controller="Companies" asp-action="Index">
+                                <i class="bi bi-buildings"></i> Companies
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Right: Actions -->
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- Search -->
+                        <form class="d-none d-lg-flex align-items-center" role="search" style="position:relative;">
+                            <i class="bi bi-search text-muted" style="position:absolute; left:10px; top:9px;"></i>
+                                <input class="form-control bg-dark text-light border-0 ps-4"
+                                       type="search" placeholder="Search jobs..."
+                                       style="width:200px; height:36px; border-radius:6px; font-size:0.9rem;">
+                        </form>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-1 text-light"
+                                   href="#" id="userMenu" data-bs-toggle="dropdown" style="cursor:pointer;">
+                                    <i class="bi bi-person-circle fs-5"></i>
+                                    <span>@UserManager.GetUserName(User)</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile"><i class="bi bi-person"></i> Profile</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Register"
+                               class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
+                                <i class="bi bi-person-plus"></i> Register
+                            </a>
+                            <a asp-controller="Account" asp-action="Login"
+                               class="btn btn-sm btn-primary d-flex align-items-center gap-1">
+                                <i class="bi bi-box-arrow-in-right"></i> Login
+                            </a>
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <!-- Main Content -->
-    <main class="container">
+    <main class="container mt-3">
         @RenderBody()
     </main>
 
-    <!-- Footer -->
-    <footer class="text-center mt-auto shadow-sm">
-        <div class="container">
-            <span>© @DateTime.Now.Year <strong>Job Portal</strong> — Built with ❤️ by Ahmed Roshdi</span>
-        </div>
+    <footer class="py-3 text-center mt-auto">
+        <span>� @DateTime.Now.Year Job Portal System � <span class="text-secondary">Designed with</span> <i class="bi bi-heart-fill text-danger"></i></span>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        const savedTheme = localStorage.getItem('theme');
+
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            icon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            icon.classList.toggle('bi-sun-fill', !isLight);
+            icon.classList.toggle('bi-moon-fill', isLight);
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+    </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

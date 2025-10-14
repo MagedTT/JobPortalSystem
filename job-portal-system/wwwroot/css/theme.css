@@ -1,0 +1,28 @@
+/* Light mode overrides */
+body.light-mode {
+    --bg-body: #f6f7f9;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --nav-bg: #1e293b;
+    --nav-border: #e2e8f0;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+}
+
+/* Toggle button */
+.theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.25rem;
+}
+
+    .theme-toggle:hover {
+        color: var(--accent);
+    }

@@ -12,8 +12,8 @@ using job_portal_system.Data;
 namespace job_portal_system.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251014200023_configIdentity")]
-    partial class configIdentity
+    [Migration("20251015004931_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

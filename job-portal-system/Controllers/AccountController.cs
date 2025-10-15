@@ -1,22 +1,25 @@
+using AutoMapper;
 using job_portal_system.Attributes;
-using job_portal_system.Models.Domain;
+using job_portal_system.Models.DTOs;
 using job_portal_system.Models.ViewModels;
+using job_portal_system.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace job_portal_system.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(IAuthService authService, IMapper mapper)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _authService = authService;
+            _mapper = mapper;
         }
+
+        // ==================== Register Views ====================
 
         [HttpGet]
         [RedirectAuthenticated]
@@ -28,95 +31,101 @@ namespace job_portal_system.Controllers
 
         [HttpGet]
         [RedirectAuthenticated]
-        public IActionResult RegisterEmployeer() => View(new RegisterEmployerViewModel());
+        public IActionResult RegisterEmployer() => View(new RegisterEmployerViewModel());
+
+
+        // ==================== Register Job Seeker ====================
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterJobSeeker(RegisterJobSeekerViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = new User
-            {
-                UserName = model.Email,
-                Email = model.Email,
-            };
+            var dto = _mapper.Map<RegisterJobSeekerDto>(model);
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
+            var (isSuccess, error) = await _authService.RegisterJobSeekerAsync(dto);
+
+            if (isSuccess)
             {
-                await _userManager.AddToRoleAsync(user, "JobSeeker");
                 TempData["Message"] = "Job Seeker registered successfully!";
                 return RedirectToAction("Login");
             }
 
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-
+            ModelState.AddModelError("", error);
             return View(model);
         }
 
+
+        // ==================== Register Employer ====================
+
         [HttpPost]
-        public async Task<IActionResult> RegisterEmployeer(RegisterEmployerViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterEmployer(RegisterEmployerViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var user = new User
-            {
-                UserName = model.CompanyEmail,
-                Email = model.CompanyEmail,
-            };
+            var dto = _mapper.Map<RegisterEmployerDto>(model);
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
+            var (isSuccess, error) = await _authService.RegisterEmployerAsync(dto);
+
+            if (isSuccess)
             {
-                await _userManager.AddToRoleAsync(user, "Employer");
                 TempData["Message"] = "Employer registered successfully!";
                 return RedirectToAction("Login");
             }
 
-            foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
-
+            ModelState.AddModelError("", error);
             return View(model);
         }
+
+
+        // ==================== Login ====================
 
         [HttpGet]
         [RedirectAuthenticated]
         public IActionResult Login() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RedirectAuthenticated]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var (isSuccess, error) = await _authService.LoginAsync(model.Email, model.Password);
 
-            if (result.Succeeded)
-                return RedirectToAction("Index","Home");
+            if (isSuccess)
+                return RedirectToAction("Index", "Home");
 
-            ModelState.AddModelError("", "Invalid login attempt.");
+            ModelState.AddModelError("", error);
             return View(model);
         }
+
+
+        // ==================== Profile ====================
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            var userProfile = await _authService.GetUserProfileAsync(User);
+            if (userProfile == null)
                 return RedirectToAction("Login");
 
-            return View(user);
+            return View(userProfile);
         }
+
+
+        // ==================== Logout ====================
 
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _authService.LogoutAsync();
             return RedirectToAction("Index", "Home");
         }
     }

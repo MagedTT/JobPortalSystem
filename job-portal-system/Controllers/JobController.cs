@@ -24,7 +24,7 @@ namespace job_portal_system.Controllers
             return View(viewModels);
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(string id)
         {
             var jobDto = await _jobService.GetJobByIdAsync(id);
             if (jobDto == null)
@@ -51,7 +51,7 @@ namespace job_portal_system.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string id)
         {
             var jobDto = await _jobService.GetJobByIdAsync(id);
             if (jobDto == null)
@@ -73,7 +73,7 @@ namespace job_portal_system.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             var jobDto = await _jobService.GetJobByIdAsync(id);
             if (jobDto == null)
@@ -85,7 +85,7 @@ namespace job_portal_system.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             await _jobService.DeleteJobAsync(id);
             return RedirectToAction(nameof(Index));

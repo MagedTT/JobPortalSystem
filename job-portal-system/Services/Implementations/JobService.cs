@@ -23,7 +23,7 @@ namespace job_portal_system.Services.Implementations
             return _mapper.Map<IEnumerable<JobDto>>(jobs);
         }
 
-        public async Task<JobDto?> GetJobByIdAsync(int id)
+        public async Task<JobDto?> GetJobByIdAsync(string id)
         {
             var job = await _repo.GetByIdAsync(id);
             return _mapper.Map<JobDto?>(job);
@@ -49,7 +49,7 @@ namespace job_portal_system.Services.Implementations
             await _repo.SaveAsync();
         }
 
-        public async Task DeleteJobAsync(int id)
+        public async Task DeleteJobAsync(string id)
         {
             var job = await _repo.GetByIdAsync(id);
             if (job != null)

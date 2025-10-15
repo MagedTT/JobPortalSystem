@@ -1,4 +1,5 @@
-@model job_portal_system.Models.ViewModels.RegisterEmployeerViewModel
+@model job_portal_system.Models.ViewModels.RegisterEmployerViewModel
+
 @{
     ViewData["Title"] = "Register as Employer";
 }
@@ -9,36 +10,48 @@
     <div class="register-card">
         <h2>Register as Employer</h2>
 
-        <form asp-action="RegisterEmployer" method="post" class="floating-form">
+        <form asp-action="RegisterEmployeer" method="post" class="floating-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
+            <!-- Company Name -->
             <div class="form-floating mb-3">
                 <input asp-for="CompanyName" class="form-control" placeholder="Company Name" />
-                <label asp-for="CompanyName">Company Name</label>
+                <label asp-for="CompanyName"></label>
+                <span asp-validation-for="CompanyName" class="text-danger"></span>
             </div>
 
+            <!-- Company Email -->
             <div class="form-floating mb-3">
                 <input asp-for="CompanyEmail" type="email" class="form-control" placeholder="Company Email" />
-                <label asp-for="CompanyEmail">Company Email</label>
+                <label asp-for="CompanyEmail"></label>
+                <span asp-validation-for="CompanyEmail" class="text-danger"></span>
             </div>
 
+            <!-- Password -->
             <div class="form-floating mb-3">
                 <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
-                <label asp-for="Password">Password</label>
+                <label asp-for="Password"></label>
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
+            <!-- Confirm Password -->
             <div class="form-floating mb-3">
                 <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
-                <label asp-for="ConfirmPassword">Confirm Password</label>
+                <label asp-for="ConfirmPassword"></label>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
+            <!-- Optional fields -->
             <div class="form-floating mb-3">
                 <input asp-for="Website" class="form-control" placeholder="Company Website" />
-                <label asp-for="Website">Company Website</label>
+                <label asp-for="Website"></label>
+                <span asp-validation-for="Website" class="text-danger"></span>
             </div>
 
             <div class="form-floating mb-4">
                 <input asp-for="Industry" class="form-control" placeholder="Industry" />
-                <label asp-for="Industry">Industry</label>
+                <label asp-for="Industry"></label>
+                <span asp-validation-for="Industry" class="text-danger"></span>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Register</button>
@@ -52,3 +65,7 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

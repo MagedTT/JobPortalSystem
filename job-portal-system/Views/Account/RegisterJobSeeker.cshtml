@@ -10,13 +10,25 @@
         <h2>Register as Job Seeker</h2>
 
         <form asp-action="RegisterJobSeeker" method="post" class="floating-form">
-            <div class="form-floating mb-3">
-                <input asp-for="FullName" class="form-control" placeholder="Full Name" />
-                <label asp-for="FullName">Full Name</label>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                        <label asp-for="FirstName">First Name</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                        <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                        <label asp-for="LastName">Last Name</label>
+                    </div>
+                </div>
             </div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <input asp-for="Email" type="email" class="form-control" placeholder="Email" />
                 <label asp-for="Email">Email</label>
             </div>
 
@@ -25,19 +37,9 @@
                 <label asp-for="Password">Password</label>
             </div>
 
-            <div class="form-floating mb-3">
+            <div class="form-floating mb-4">
                 <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
                 <label asp-for="ConfirmPassword">Confirm Password</label>
-            </div>
-
-            <div class="form-floating mb-3">
-                <input asp-for="Phone" class="form-control" placeholder="Phone" />
-                <label asp-for="Phone">Phone</label>
-            </div>
-
-            <div class="form-floating mb-4">
-                <input asp-for="Skills" class="form-control" placeholder="Skills" />
-                <label asp-for="Skills">Skills</label>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Register</button>

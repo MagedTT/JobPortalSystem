@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using job_portal_system.Data;
 
@@ -11,9 +12,11 @@ using job_portal_system.Data;
 namespace job_portal_system.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015121342_SeedingData")]
+    partial class SeedingData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,6 +239,7 @@ namespace job_portal_system.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LogoPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -362,6 +366,7 @@ namespace job_portal_system.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CVPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Education")
@@ -376,6 +381,7 @@ namespace job_portal_system.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -384,9 +390,6 @@ namespace job_portal_system.Migrations
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Skills")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -399,6 +402,21 @@ namespace job_portal_system.Migrations
                         .IsUnique();
 
                     b.ToTable("JobSeekers");
+                });
+
+            modelBuilder.Entity("job_portal_system.Models.Domain.JobSeekerSkill", b =>
+                {
+                    b.Property<string>("JobSeekerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.HasKey("JobSeekerId", "SkillId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("JobSeekerSkills");
                 });
 
             modelBuilder.Entity("job_portal_system.Models.Domain.Message", b =>
@@ -496,6 +514,23 @@ namespace job_portal_system.Migrations
                     b.ToTable("Reports");
                 });
 
+            modelBuilder.Entity("job_portal_system.Models.Domain.Skill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skills");
+                });
+
             modelBuilder.Entity("job_portal_system.Models.Domain.User", b =>
                 {
                     b.Property<string>("Id")
@@ -562,6 +597,25 @@ namespace job_portal_system.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", "Security");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "e5badfce-c94d-4fd5-b3b2-3148dfe9ba6c",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4c8b4ead-5fad-4b12-b725-771ae419f02c",
+                            Email = "user1@gmail.com",
+                            EmailConfirmed = false,
+                            IsActive = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER1@GMAIL.COM",
+                            NormalizedUserName = "USER1",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFiDL5hdVllhUvftPxAG0eORhdbKIBtX5gliAmtuyuNOnTfT94n0lcnwhv6bWHVt1A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "ca5cb7a1-7dcd-40b3-a306-c3807865adaa",
+                            TwoFactorEnabled = false,
+                            UserName = "User1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -705,6 +759,25 @@ namespace job_portal_system.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("job_portal_system.Models.Domain.JobSeekerSkill", b =>
+                {
+                    b.HasOne("job_portal_system.Models.Domain.JobSeeker", "JobSeeker")
+                        .WithMany("JobSeekerSkills")
+                        .HasForeignKey("JobSeekerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("job_portal_system.Models.Domain.Skill", "Skill")
+                        .WithMany("JobSeekerSkills")
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobSeeker");
+
+                    b.Navigation("Skill");
+                });
+
             modelBuilder.Entity("job_portal_system.Models.Domain.Message", b =>
                 {
                     b.HasOne("job_portal_system.Models.Domain.User", "Receiver")
@@ -770,6 +843,13 @@ namespace job_portal_system.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("FavoriteJobs");
+
+                    b.Navigation("JobSeekerSkills");
+                });
+
+            modelBuilder.Entity("job_portal_system.Models.Domain.Skill", b =>
+                {
+                    b.Navigation("JobSeekerSkills");
                 });
 
             modelBuilder.Entity("job_portal_system.Models.Domain.User", b =>

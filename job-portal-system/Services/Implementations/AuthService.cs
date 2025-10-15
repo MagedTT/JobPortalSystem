@@ -13,6 +13,7 @@ namespace job_portal_system.Services.Implementations
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmployerService _employerService;
+        private readonly IJobSeekerService _jobSeekerServce;
         private readonly IMapper _mapper;
 
         public AuthService(
@@ -20,11 +21,13 @@ namespace job_portal_system.Services.Implementations
             SignInManager<User> signInManager,
             IEmployerService employerService,
             IMapper mapper,
+            IJobSeekerService jobSeekerService,
             IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _employerService = employerService;
+            _jobSeekerServce = jobSeekerService;
             _mapper = mapper;
         }
 
@@ -66,12 +69,12 @@ namespace job_portal_system.Services.Implementations
             if (!result.Succeeded)
                 return (false, string.Join("; ", result.Errors.Select(e => e.Description)));
 
-            await _userManager.AddToRoleAsync(user, "JobSeeker");
+            await _userManager.AddToRoleAsync(user, "jobseeker");
 
             var jobSeeker = _mapper.Map<JobSeeker>(dto);
             jobSeeker.UserId = user.Id;
 
-            // TODO: Add JobSeekerService later
+            await _jobSeekerServce.AddJobSeekerAsync(jobSeeker);
             return (true, string.Empty);
         }
 
@@ -79,6 +82,13 @@ namespace job_portal_system.Services.Implementations
 
         public async Task<(bool IsSuccess, string ErrorMessage)> LoginAsync(string email, string password)
         {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+                return (false, "No");
+
+
+
             var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)

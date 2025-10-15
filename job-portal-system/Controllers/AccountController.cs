@@ -28,7 +28,7 @@ namespace job_portal_system.Controllers
 
         [HttpGet]
         [RedirectAuthenticated]
-        public IActionResult RegisterEmployeer() => View(new RegisterEmployeerViewModel());
+        public IActionResult RegisterEmployeer() => View(new RegisterEmployerViewModel());
 
         [HttpPost]
         public async Task<IActionResult> RegisterJobSeeker(RegisterJobSeekerViewModel model)
@@ -57,7 +57,7 @@ namespace job_portal_system.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterEmployeer(RegisterEmployeerViewModel model)
+        public async Task<IActionResult> RegisterEmployeer(RegisterEmployerViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);

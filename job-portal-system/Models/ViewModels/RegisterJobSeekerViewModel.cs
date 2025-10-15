@@ -1,12 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace job_portal_system.Models.ViewModels
 {
     public class RegisterJobSeekerViewModel
     {
-        public string FullName { get; set; } = string.Empty;
+        [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
+
+        [Required, DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
+
+        [Required, DataType(DataType.Password), Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public string Skills { get; set; } = string.Empty;
+
+        // optional: early personal info (not required for registration itself)
+        [Display(Name = "First Name")]
+        public string? FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        public string? LastName { get; set; }
     }
 }

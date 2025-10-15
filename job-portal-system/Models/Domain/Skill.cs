@@ -1,8 +1,8 @@
-namespace job_portal_system.Models.Domain;
+// namespace job_portal_system.Models.Domain;
 
-public class Skill
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = "";
-    public ICollection<JobSeekerSkill> JobSeekerSkills { get; set; } = new List<JobSeekerSkill>();
-}
+// public class Skill
+// {
+//     public int Id { get; set; }
+//     public string Name { get; set; } = "";
+//     public ICollection<JobSeekerSkill> JobSeekerSkills { get; set; } = new List<JobSeekerSkill>();
+// }

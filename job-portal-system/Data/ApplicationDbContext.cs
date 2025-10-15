@@ -16,11 +16,11 @@ namespace job_portal_system.Data
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobRequirement> JobRequirements { get; set; }
         public DbSet<JobSeeker> JobSeekers { get; set; }
-        public DbSet<JobSeekerSkill> JobSeekerSkills { get; set; }
+        // public DbSet<JobSeekerSkill> JobSeekerSkills { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Report> Reports { get; set; }
-        public DbSet<Skill> Skills { get; set; }
+        // public DbSet<Skill> Skills { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }

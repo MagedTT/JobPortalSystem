@@ -1,0 +1,35 @@
+@model IEnumerable<job_portal_system.Models.Domain.Employer>
+
+@{
+    ViewData["Title"] = "Pending Employers";
+}
+
+<div class="container mt-4">
+    <h3>Pending Employers</h3>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Email</th>
+                <th>Location</th>
+                <th>Approve</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in Model)
+            {
+                <tr>
+                    <td>@emp.CompanyName</td>
+                    <td>@emp.User.Email</td>
+                    <td>@emp.Location</td>
+                    <td>
+                        <form asp-action="ApproveEmployer" method="post">
+                            <input type="hidden" name="id" value="@emp.Id" />
+                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -19,7 +19,7 @@ namespace job_portal_system.Repositories.Implementations
         public async Task<IEnumerable<T>> GetAllAsync()
             => await _dbSet.ToListAsync();
 
-        public async Task<T?> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(string id)
             => await _dbSet.FindAsync(id);
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)

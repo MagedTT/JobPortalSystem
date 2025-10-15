@@ -1,4 +1,4 @@
-@model job_portal_system.Models.Domain.User
+@model job_portal_system.Models.DTOs.UserProfileDto
 
 @{
     ViewData["Title"] = "Profile";
@@ -20,8 +20,8 @@
                 <dt class="col-sm-4">Email:</dt>
                 <dd class="col-sm-8">@Model.Email</dd>
 
-                <dt class="col-sm-4">Role:</dt>
-                <dd class="col-sm-8">@Model.Role</dd>
+                @* <dt class="col-sm-4">Role:</dt>
+                <dd class="col-sm-8">@Model.Role</dd> *@
 
                 <dt class="col-sm-4">Phone Number:</dt>
                 <dd class="col-sm-8">@Model.PhoneNumber ?? "N/A"</dd>

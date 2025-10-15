@@ -1,0 +1,56 @@
+﻿.admin-toolbar {
+    background-color: #161b22;
+    border-bottom: 1px solid #21262d;
+    padding: 8px 0;
+    position: sticky;
+    top: 62px; /* تحت الـ navbar */
+    z-index: 1025;
+}
+
+.admin-link {
+    color: #c9d1d9;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .admin-link:hover {
+        color: #4ade80;
+    }
+
+.card {
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+    .card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+h6 {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+/*.admin-quick-actions {
+    position: sticky;
+    top: 100px; 
+    z-index: 1000;
+}*/
+
+.admin-toolbar .quick-action-btn {
+    width: 20px; 
+    height: 20px;
+    padding: 0; 
+    border-radius: 6px; 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    font-size: 0.9rem;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}

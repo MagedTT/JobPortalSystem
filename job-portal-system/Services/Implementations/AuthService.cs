@@ -135,7 +135,7 @@ namespace job_portal_system.Services.Implementations
                 <h3>Hello,</h3>
                 <p>Click the link below to reset your password:</p>
                 <p><a href='{resetLink}'>Reset Password</a></p>
-                <p>If you didn’t request this, just ignore this email.</p>";
+                <p>If you didnï¿½t request this, just ignore this email.</p>";
 
             await _emailSender.SendEmailAsync(email, subject, body);
 

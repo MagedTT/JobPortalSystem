@@ -23,6 +23,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
+
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -32,6 +34,7 @@ builder.Services.AddScoped<IEmployerRepository, EmployerRepository>();
 builder.Services.AddScoped<IEmployerService, EmployerService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -72,8 +75,8 @@ using (var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
     }
 
-    var adminEmail = "admin@system.com";
-    var adminPassword = "admin123"; 
+    var adminEmail = "admin@jobverse.com";
+    var adminPassword = "Admin123!"; 
 
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)

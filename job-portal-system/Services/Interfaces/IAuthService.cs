@@ -11,5 +11,7 @@ namespace job_portal_system.Services.Interfaces
         Task<(bool IsSuccess, string ErrorMessage)> LoginAsync(string email, string password);
         Task LogoutAsync();
         Task<UserProfileDto?> GetUserProfileAsync(ClaimsPrincipal userClaims);
+        Task<(bool IsSuccess, string ErrorMessage)> ResetPasswordAsync(string email, string token, string newPassword);
+        Task<(bool IsSuccess, string ErrorMessage)> ForgotPasswordAsync(string email, string callbackUrl);
     }
 }

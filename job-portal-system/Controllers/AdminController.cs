@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace job_portal_system.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;

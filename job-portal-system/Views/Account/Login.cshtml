@@ -9,11 +9,20 @@
         <div class="card-body p-4">
             <h3 class="text-center mb-4">Login to Your Account</h3>
 
-            @if (TempData["Message"] != null)
-            {
-                <div class="alert alert-success text-center">@TempData["Message"]</div>
-            }
+            <!-- Tabs -->
+            <ul class="nav nav-tabs mb-3" id="loginTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="admin-tab" data-bs-toggle="tab" type="button">Admin</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="employer-tab" data-bs-toggle="tab" type="button">Employer</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="jobseeker-tab" data-bs-toggle="tab" type="button">Job Seeker</button>
+                </li>
+            </ul>
 
+            <!-- Login Form -->
             <form asp-action="Login" method="post" novalidate>
                 <div class="form-group mb-3">
                     <label asp-for="Email" class="form-label"></label>
@@ -29,11 +38,14 @@
 
                 <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill">Login</button>
 
-                <div class="text-center mt-3">
-                    <small>Don’t have an account?</small>
-                    <div class="d-flex justify-content-center gap-2 mt-2">
-                        <a asp-action="RegisterJobSeeker" class="btn btn-outline-secondary btn-sm rounded-pill">Job Seeker</a>
-                        <a asp-action="RegisterEmployeer" class="btn btn-outline-secondary btn-sm rounded-pill">Employer</a>
+                <div class="text-center mt-2">
+                    <div class="mb-1">
+                        <a asp-action="ForgotPassword" class="text-decoration-none small text-muted">Forgot your password?</a>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center gap-2 mt-2 flex-wrap">
+                        <span class="small text-muted">Don’t have an account?</span>
+                        <a asp-action="RegisterJobSeeker" class="btn btn-outline-secondary btn-sm rounded-pill py-1">Job Seeker</a>
+                        <a asp-action="RegisterEmployeer" class="btn btn-outline-secondary btn-sm rounded-pill py-1">Employer</a>
                     </div>
                 </div>
             </form>
@@ -41,6 +53,52 @@
     </div>
 </div>
 
+<style>
+    #loginTabs{
+        border-bottom: 1px solid #28a745 !important;
+    }
+    #loginTabs .nav-link {
+        color: #155724;  
+    }
+
+        #loginTabs .nav-link.active {
+            background-color: #218838;
+            color: #fff;
+            border-color: #218838;
+            border-bottom:0;
+        }
+
+        #loginTabs .nav-link:hover {
+            background-color: #155724;
+            color: white;
+            border-color: #155724;
+        }
+</style>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const emailInput = document.getElementById("Email");
+        const passwordInput = document.getElementById("Password");
+
+        const credentials = {
+            "admin-tab": { email: "admin@jobverse.com", password: "Admin123!" },
+            "employer-tab": { email: "employer1@jobverse.com", password: "Employer123!" },
+            "jobseeker-tab": { email: "jobseeker1@jobverse.com", password: "JobSeeker123!" }
+        };
+
+        const tabs = document.querySelectorAll("#loginTabs button");
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function () {
+                const creds = credentials[tab.id];
+                emailInput.value = creds.email;
+                passwordInput.value = creds.password;
+            });
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            emailInput.value = credentials["admin-tab"].email;
+            passwordInput.value = credentials["admin-tab"].password;
+        });
+    </script>
 }

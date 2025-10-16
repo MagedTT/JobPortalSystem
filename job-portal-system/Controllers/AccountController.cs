@@ -128,5 +128,52 @@ namespace job_portal_system.Controllers
             await _authService.LogoutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public IActionResult ForgotPassword() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var callbackUrl = Url.Action("ResetPassword", "Account", null, Request.Scheme);
+            var result = await _authService.ForgotPasswordAsync(model.Email, callbackUrl);
+
+            if (!result.IsSuccess)
+            {
+                ViewBag.Error = result.ErrorMessage;
+                return View(model);
+            }
+
+            ViewBag.Message = "A reset link has been sent to your email.";
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            var model = new ResetPasswordDto { Email = email, Token = token };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _authService.ResetPasswordAsync(model.Email, model.Token, model.NewPassword);
+
+            if (!result.IsSuccess)
+            {
+                ViewBag.Error = result.ErrorMessage;
+                return View(model);
+            }
+
+            ViewBag.Message = "Password has been reset successfully!";
+            return View("ResetPasswordConfirmation");
+        }
     }
 }

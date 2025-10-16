@@ -16,12 +16,18 @@ namespace job_portal_system.Controllers
 
         public async Task<IActionResult> Dashboard()
         {
-            var totalUsers = await _adminService.GetTotalUsersAsync();
+            var totalUsers = await _adminService.GetTotalJobSeekersAsync();
             var totalEmployers = await _adminService.GetTotalEmployersAsync();
             var totalJobs = await _adminService.GetTotalJobsAsync();
             var pendingEmployers = await _adminService.GetPendingEmployersAsync();
+            var allSalaries = await _adminService.GetAllSalariesForAllJobs();
+            var allCategoriesWithCount = await _adminService.GetJobsCountByCategoriesAsync();
 
-            ViewBag.TotalUsers = totalUsers;
+
+            ViewBag.AllSalaries = allSalaries;
+            ViewBag.AllCategories = allCategoriesWithCount.Keys.ToList();
+            ViewBag.CategoryCounts = allCategoriesWithCount.Values.ToList();
+            ViewBag.TotalJobSeekers = totalUsers;
             ViewBag.TotalEmployers = totalEmployers;
             ViewBag.TotalJobs = totalJobs;
             ViewBag.PendingEmployers = pendingEmployers;

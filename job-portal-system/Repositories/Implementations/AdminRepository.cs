@@ -14,8 +14,8 @@ namespace job_portal_system.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<int> GetTotalUsersAsync()
-            => await _context.Users.CountAsync();
+        public async Task<int> GetTotalJobSeekersAsync()
+            => await _context.JobSeekers.CountAsync();
 
         public async Task<int> GetTotalEmployersAsync()
             => await _context.Employers.CountAsync();
@@ -39,5 +39,11 @@ namespace job_portal_system.Repositories.Implementations
             employer.IsApproved = true;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<int>> GetAllSalariesForAllJobs()
+            => await _context.Jobs.Select(x => x.Salary).ToListAsync();
+
+        public async Task<Dictionary<string, int>> GetJobsCountByCategoriesAsync()
+            => await _context.Jobs.GroupBy(x => x.Category).Select(r => new { Category = r.Key, Count = r.Count() }).ToDictionaryAsync(x => x.Category.Name, x => x.Count);
     }
 }

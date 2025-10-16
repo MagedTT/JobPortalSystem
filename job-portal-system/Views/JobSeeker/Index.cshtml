@@ -60,10 +60,18 @@
 
         <div class="row mt-5 d-flex flex-row justify-content-center">
             <h3 class="text-center">Skills</h3>
-            @foreach (var skill in Model.Skills)
+            @if (Model.Skills is null)
             {
-                <button class="btn btn-outline-dark">@skill</button>
+                <button class="btn btn-outline-dark">No Skills Added Yet</button>
             }
+            else
+            {
+                foreach (var skill in Model.Skills)
+                {
+                    <button class="btn btn-outline-dark">@skill</button>
+                }
+            }
+
         </div>
     </div>
 </div>

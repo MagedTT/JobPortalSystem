@@ -1,4 +1,5 @@
-@{
+@using System.Text.Json
+@* @{
     ViewData["Title"] = "Admin Dashboard";
 }
 
@@ -39,7 +40,8 @@
         </div>
 
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white border-start border-4 border-warning">
+            <div
+                class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white border-start border-4 border-warning">
                 <div class="text-warning mb-2">
                     <i class="bi bi-hourglass-split fs-2"></i>
                 </div>
@@ -50,4 +52,139 @@
         </div>
     </div>
 
-</div>
+</div> *@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Charts</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/AdminDashboard/endor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/AdminDashboard/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div class="container-fluid">
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Charts</h1>
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <div class="col-xl-8 col-lg-7">
+
+                            <!-- Area Chart -->
+                            @* <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">All Job Categories</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="jobCategories"
+                                            data-categories="@Html.Raw(JsonSerializer.Serialize(ViewBag.AllCategories))"></canvas>
+                                    </div>
+                                </div>
+                            </div> *@
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Jobs by Category</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-bar">
+                                        <canvas id="jobCategoryChart"
+                                            data-categories='@Html.Raw(JsonSerializer.Serialize(ViewBag.AllCategories))'
+                                            data-counts='@Html.Raw(JsonSerializer.Serialize(ViewBag.CategoryCounts))'></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bar Chart -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Salary Distribution</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="salaryChart"
+                                            data-salaries="@Html.Raw(JsonSerializer.Serialize(ViewBag.AllSalaries))"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Donut Chart -->
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Employers vs. JobSeekers</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4">
+                                        <canvas id="myPieChart" data-total-employers="@ViewBag.TotalEmployers"
+                                            data-total-job-seekers="@ViewBag.TotalJobSeekers"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/AdminDashboard/vendor/jquery/jquery.min.js"></script>
+    <script src="/AdminDashboard/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/AdminDashboard/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/AdminDashboard/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/AdminDashboard/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/AdminDashboard/js/demo/chart-area-demo.js"></script>
+    <script src="/AdminDashboard/js/demo/chart-pie-demo.js"></script>
+    <script src="/AdminDashboard/js/demo/chart-bar-demo.js"></script>
+
+</body>
+
+</html>

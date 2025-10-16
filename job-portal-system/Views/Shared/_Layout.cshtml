@@ -113,8 +113,14 @@
                                     <span>@UserManager.GetUserName(User)</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile"><i class="bi bi-person"></i> Profile</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Security"><i class="bi bi-shield-check"></i> Security</a></li>
+                                    @if (User.IsInRole("jobseeker"))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="JobSeeker" asp-action="Index" asp-route-id="@UserManager.GetUserId(User)"><i class="bi bi-person"></i> Profile</a></li>
+                                    }
+                                    else if (User.IsInRole("employer"))
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Employer" asp-action="Index" asp-route-userId="@UserManager.GetUserId(User)"><i class="bi bi-person"></i> Profile</a></li>
+                                    }
                                     <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                                 </ul>
                             </div>
@@ -166,7 +172,7 @@
     </main>
 
     <footer class="py-3 text-center mt-auto">
-        <span>© @DateTime.Now.Year Job Portal System  <span class="text-secondary">Designed with</span> <i class="bi bi-heart-fill text-danger"></i></span>
+        <span>� @DateTime.Now.Year Job Portal System � <span class="text-secondary">Designed with</span> <i class="bi bi-heart-fill text-danger"></i></span>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

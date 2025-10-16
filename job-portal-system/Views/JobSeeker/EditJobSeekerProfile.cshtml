@@ -1,0 +1,96 @@
+@model EditJobSeekerViewModel
+
+<form asp-action="EditJobSeekerProfile" asp-controller="JobSeeker" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="@Model.UserId">
+    <div class="container mt-5" style="max-width: 600px;">
+        <div class="card shadow rounded-4 border-0">
+            <div class="card-body p-4">
+                <h3 class="text-center mb-4">Update Profile</h3>
+
+                <div class="d-flex justify-content-center align-items-center">
+                    @if (Model.ImagePath is null)
+                    {
+                        <label asp-for="ImageFile">
+                            <img src="/Images/defaultImage.jpg" alt="Profile" style="cursor: pointer;"
+                                class="profile-image rounded-circle">
+                        </label>
+                        <input type="file" class="d-none image-input" asp-for="ImageFile" />
+                    }
+
+                    else
+                    {
+                        <label asp-for="ImageFile">
+                            <img src="@($"/Images/{Model.ImagePath}")" alt="Profile" style="cursor: pointer;"
+                                class="profile-image rounded-circle" asp-for="ImageFile">
+                        </label>
+                        <input type="file" class="d-none image-input" asp-for="ImageFile" />
+                    }
+                </div>
+
+                @* @if (Model.CVPath is not null)
+                { *@
+                <div class="m-2 d-flex justify-content-center align-items-center">
+                    <label asp-for="CVFile">
+                    </label>
+                    <input style="cursor: pointer;" type="file" class="btn btn-outline-dark" asp-for="CVFile" />
+                </div>
+                @* } *@
+                @* else
+                {
+                    <div class="m-2 d-flex justify-content-center align-items-center">
+                        <label asp-for="CVFile">
+                        </label>
+                        <input style="cursor: pointer;" type="file" class="btn btn-outline-dark" asp-for="CVPath" />
+                    </div>
+                } *@
+
+                <div class="form-group mb-3">
+                    <label asp-for="FirstName" class="form-label"></label>
+                    <input asp-for="FirstName" class="form-control" placeholder="first name" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="LastName" class="form-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Education" class="form-label"></label>
+                    <input asp-for="Education" class="form-control" />
+                    <span asp-validation-for="Education" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="ExperienceYears" class="form-label"></label>
+                    <input asp-for="ExperienceYears" class="form-control" />
+                    <span asp-validation-for="ExperienceYears" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Location" class="form-label"></label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Skills" class="form-label"></label>
+                    <input asp-for="Skills" class="form-control" />
+                    <span asp-validation-for="Skills" class="text-danger"></span>
+                </div>
+                <input type="submit" class="btn btn-success w-100" value="Submit">
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelector('.image-input').addEventListener('change', function (event) {
+            document.querySelector('.profile-image').src = window.URL.createObjectURL(event.target.files[0]);
+        });
+    </script>
+}

@@ -10,10 +10,9 @@ namespace job_portal_system.Models.ViewModels
         [Required, DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
-        [Required, DataType(DataType.Password), Compare("Password", ErrorMessage = "Passwords do not match")]
+        [Required, DataType(DataType.Password), Compare("Password", ErrorMessage = "Passwords do not match"), Display(Name ="Confirm Password")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
-        // optional: early personal info (not required for registration itself)
         [Display(Name = "First Name")]
         public string? FirstName { get; set; }
 

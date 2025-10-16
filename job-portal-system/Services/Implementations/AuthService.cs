@@ -15,6 +15,7 @@ namespace job_portal_system.Services.Implementations
         private readonly IEmployerService _employerService;
         private readonly IJobSeekerService _jobSeekerServce;
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
 
         public AuthService(
             UserManager<User> userManager,
@@ -22,13 +23,14 @@ namespace job_portal_system.Services.Implementations
             IEmployerService employerService,
             IMapper mapper,
             IJobSeekerService jobSeekerService,
-            IHttpContextAccessor httpContextAccessor)
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _employerService = employerService;
             _jobSeekerServce = jobSeekerService;
             _mapper = mapper;
+            _emailSender = emailSender;
         }
 
         // ==================== Register Employer ====================
@@ -116,6 +118,41 @@ namespace job_portal_system.Services.Implementations
             dto.Role = roles.FirstOrDefault();
 
             return dto;
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> ForgotPasswordAsync(string email, string callbackUrl)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return (false, "Email not found.");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = Uri.EscapeDataString(token);
+            var resetLink = $"{callbackUrl}?email={email}&token={encodedToken}";
+
+            var subject = "Reset your Jobverse password";
+            var body = $@"
+                <h3>Hello,</h3>
+                <p>Click the link below to reset your password:</p>
+                <p><a href='{resetLink}'>Reset Password</a></p>
+                <p>If you didn�t request this, just ignore this email.</p>";
+
+            await _emailSender.SendEmailAsync(email, subject, body);
+
+            return (true, "");
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return (false, "User not found.");
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            if (!result.Succeeded)
+                return (false, string.Join("; ", result.Errors.Select(e => e.Description)));
+
+            return (true, "");
         }
 
     }

@@ -38,3 +38,8 @@
         background-color: #e2e8f0;
         color: var(--text-dark) !important;
     }
+
+.form-floating input:not(:focus):placeholder-shown ~ label {
+    opacity: 0;
+    visibility: hidden;
+}

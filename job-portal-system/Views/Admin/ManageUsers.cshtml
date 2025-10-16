@@ -1,0 +1,128 @@
+@model List<DisplayJobSeekerForAdminViewModel>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<a asp-action="CreateNewJobSeeker" class="btn btn-info m-2">Create new Job Seeker</a>
+
+@if (Model is null)
+{
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        <h1 class="text-warning">No User with that email was found</h1>
+        <hr>
+        <a asp-action="ManageUsers" class="btn btn-info w-100">Back</a>
+    </div>
+}
+else
+{
+    <form asp-action="ManageUsers" method="post">
+        <div class="d-flex align-items-center justify-content-center">
+            <input type="email" name="email" class="form-control" placeholder="search job seekers by email">
+            <input type="submit" value="Search" class="btn btn-success">
+        </div>
+    </form>
+
+    <div class="container-fluid">
+        <div class="row">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Education</th>
+                        <th>Years of Experience</th>
+                        <th>IsActive</th>
+                        <th>Details</th>
+                        <th>Activation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var jobSeeker in Model)
+                    {
+                        <tr>
+                            <td>@jobSeeker.FirstName @jobSeeker.LastName</td>
+                            <td>@jobSeeker.Email</td>
+                            <td>@jobSeeker.Education</td>
+                            <td>@jobSeeker.ExperienceYears</td>
+                            <td>
+                                @if (jobSeeker.IsActive)
+                                {
+                                    <p class="text-success">Active</p>
+                                }
+                                else
+                                {
+                                    <p class="text-danger">Not Active</p>
+                                }
+                            </td>
+                            <td>
+                                <a asp-controller="JobSeeker" asp-action="Index" asp-route-id="@jobSeeker.UserId"
+                                    class="btn btn-info">View Details</a>
+                            </td>
+
+                            <td>
+                                @if (jobSeeker.IsActive)
+                                {
+                                    <a href="javascript:;" class="js-activation text-decoration-none text-dark"
+                                        data-id="@jobSeeker.UserId">Deactivate</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:;" class="js-activation text-decoration-none text-dark"
+                                        data-id="@jobSeeker.UserId">Activate</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="d-flex align-items-center justify-content-end">
+                @for (var i = 1; i <= ViewBag.TotalPages; ++i)
+                {
+                    @* <a style="width:20px height:20px;" class="btn btn-outline-dark" value="@i"></a> *@
+                    if (i == ViewBag.TotalPages)
+                    {
+                        <span class="text-dark m-1">...</span>
+                        <a asp-action="ManageUsers" asp-route-page="@i"
+                            class="text-center d-flex align-items-center justify-content-center m-1 text-decoration-none"
+                            style="width:30px; height:30px; background-color: green; color: white; cursor: pointer;">@i</a>
+                        break;
+                    }
+                    <a asp-action="ManageUsers" asp-route-page="@i"
+                        class="text-center d-flex align-items-center justify-content-center m-1 text-decoration-none"
+                        style="width:30px; height:30px; background-color: green; color: white;cursor: pointer;">@i</a>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.js-activation').on('click', function () {
+                const btn = $(this);
+                console.log(btn.data('id'));
+                $.ajax({
+                    url: `/api/AdminApi/ToggleActivation/${btn.data('id')}`,
+                    method: 'POST',
+                    success: function (response) {
+                        if (response.isActive) {
+                            btn.text('Deactivate');
+                        } else {
+                            btn.text('Activate');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error: " + error);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

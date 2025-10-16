@@ -1,3 +1,4 @@
+using job_portal_system.Models.ViewModels;
 using job_portal_system.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,25 @@ namespace job_portal_system.Controllers
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        private readonly IJobSeekerService _jobSeekerService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService, IJobSeekerService jobSeekerService)
         {
             _adminService = adminService;
+            _jobSeekerService = jobSeekerService;
+        }
+
+        public async Task<IActionResult> CreateNewJobSeeker()
+        {
+            return View(new RegisterJobSeekerViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateNewJobSeeker(RegisterJobSeekerViewModel model)
+        {
+            await _jobSeekerService.AddJobSeekerMagedAsync(model);
+            return RedirectToAction(nameof(ManageUsers));
         }
 
         public async Task<IActionResult> Dashboard()
@@ -33,6 +49,13 @@ namespace job_portal_system.Controllers
             ViewBag.PendingEmployers = pendingEmployers;
 
             return View();
+        }
+
+        public async Task<IActionResult> ManageUsers(int page = 1, string email = null!)
+        {
+            var (jobSeekers, totalPages) = await _jobSeekerService.DiplayJobSeekerForAdminViewModel(page: page, email: email);
+            ViewBag.TotalPages = totalPages;
+            return View(jobSeekers);
         }
 
         public async Task<IActionResult> PendingEmployers()

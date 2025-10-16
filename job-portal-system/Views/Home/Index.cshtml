@@ -9,7 +9,7 @@
 
     @if (User?.Identity != null && User.Identity.IsAuthenticated)
     {
-        if (User.IsInRole("Employer"))
+        if (User.IsInRole("employer"))
         {
             <div class="alert alert-primary mt-3 p-3 rounded-4">
                 <h5 class="mb-2">Welcome Employer!</h5>
@@ -17,7 +17,7 @@
                 <a asp-controller="Job" asp-action="Create" class="btn btn-primary rounded-pill px-4 mt-2">Post a Job</a>
             </div>
         }
-        else if (User.IsInRole("JobSeeker"))
+        else if (User.IsInRole("jobseeker"))
         {
             <div class="alert alert-success mt-3 p-3 rounded-4">
                 <h5 class="mb-2">Welcome Job Seeker!</h5>

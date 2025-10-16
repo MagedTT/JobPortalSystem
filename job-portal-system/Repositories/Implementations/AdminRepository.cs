@@ -1,15 +1,17 @@
 using job_portal_system.Data;
 using job_portal_system.Models.Domain;
 using job_portal_system.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace job_portal_system.Repositories.Implementations
 {
-    public class AdminRepository : IAdminRepository
+    public class AdminRepository : JobSeekerRepository, IAdminRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public AdminRepository(ApplicationDbContext context)
+        public AdminRepository(ApplicationDbContext context, IWebHostEnvironment env, UserManager<User> userManager) : base(context, env, userManager)
         {
             _context = context;
         }

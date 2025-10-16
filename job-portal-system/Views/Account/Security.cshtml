@@ -1,0 +1,67 @@
+@model job_portal_system.Models.ViewModels.SecurityViewModel
+
+<h2 class="mb-4">Account Security</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<form asp-action="Security" method="post" class="row g-4">
+    <!-- Email Section -->
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm p-4 h-100">
+            <h5 class="card-title mb-3">Email Address</h5>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phone Section -->
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm p-4 h-100">
+            <h5 class="card-title mb-3">Phone Number</h5>
+            <div class="mb-3">
+                <label asp-for="PhoneNumber" class="form-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your phone number" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Section -->
+    <div class="col-12">
+        <div class="card shadow-sm p-4">
+            <h5 class="card-title mb-3">Change Password</h5>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label asp-for="CurrentPassword" class="form-label"></label>
+                    <input asp-for="CurrentPassword" class="form-control" placeholder="Current password" />
+                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label asp-for="NewPassword" class="form-label"></label>
+                    <input asp-for="NewPassword" class="form-control" placeholder="New password" />
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label asp-for="ConfirmNewPassword" class="form-label"></label>
+                    <input asp-for="ConfirmNewPassword" class="form-control" placeholder="Confirm new password" />
+                    <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

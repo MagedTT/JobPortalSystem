@@ -4,6 +4,7 @@ using job_portal_system.Models.DTOs;
 using job_portal_system.Models.ViewModels;
 using job_portal_system.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace job_portal_system.Controllers
@@ -174,6 +175,53 @@ namespace job_portal_system.Controllers
 
             ViewBag.Message = "Password has been reset successfully!";
             return View("ResetPasswordConfirmation");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Security()
+        {
+            var user = await _authService.GetUserProfileAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            var model = new SecurityViewModel
+            {
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Security(SecurityViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _authService.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            var securityDto = new SecurityDto
+            {
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                CurrentPassword = model.CurrentPassword,
+                NewPassword = model.NewPassword
+            };
+
+            var result = await _authService.UpdateSecurityAsync(user, securityDto);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("CurrentPassword", result.ErrorMessage);
+                return View(model);
+            }
+
+            TempData["Message"] = "Security settings updated successfully.";
+            return RedirectToAction("Security");
         }
     }
 }

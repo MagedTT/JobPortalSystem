@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using job_portal_system.Models.Domain;
 using job_portal_system.Models.DTOs;
 using job_portal_system.Services.Interfaces;
@@ -153,6 +153,47 @@ namespace job_portal_system.Services.Implementations
                 return (false, string.Join("; ", result.Errors.Select(e => e.Description)));
 
             return (true, "");
+        }
+
+        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSecurityAsync(User user, SecurityDto dto)
+        {
+            // ==================== Update Email ====================
+            if (!string.IsNullOrEmpty(dto.Email) && user.Email != dto.Email)
+            {
+                var setEmailResult = await _userManager.SetEmailAsync(user, dto.Email);
+                if (!setEmailResult.Succeeded)
+                    return (false, setEmailResult.Errors.First().Description);
+
+                var setUserNameResult = await _userManager.SetUserNameAsync(user, dto.Email);
+                if (!setUserNameResult.Succeeded)
+                    return (false, setUserNameResult.Errors.First().Description);
+            }
+
+            // ==================== Update Phone Number ====================
+            if (!string.IsNullOrEmpty(dto.PhoneNumber) && user.PhoneNumber != dto.PhoneNumber)
+            {
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, dto.PhoneNumber);
+                if (!setPhoneResult.Succeeded)
+                    return (false, setPhoneResult.Errors.First().Description);
+            }
+
+            // ==================== Update Password ====================
+            if (!string.IsNullOrEmpty(dto.NewPassword))
+            {
+                if (string.IsNullOrEmpty(dto.CurrentPassword))
+                    return (false, "Current password is required to change your password.");
+
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+                if (!changePasswordResult.Succeeded)
+                    return (false, changePasswordResult.Errors.First().Description);
+            }
+
+            return (true, string.Empty);
+        }
+
+        public async Task<User?> GetUserAsync(ClaimsPrincipal principal)
+        {
+            return await _userManager.GetUserAsync(principal);
         }
 
     }

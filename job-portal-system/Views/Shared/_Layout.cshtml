@@ -1,4 +1,4 @@
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @using job_portal_system.Models.Domain
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
@@ -113,11 +113,13 @@
                                     <span>@UserManager.GetUserName(User)</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    @if (User.IsInRole("jobseeker"))
+                                    @if (User.IsInRole("JobSeeker"))
                                     {
                                         <li><a class="dropdown-item" asp-controller="JobSeeker" asp-action="Index" asp-route-id="@UserManager.GetUserId(User)"><i class="bi bi-person"></i> Profile</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Security" asp-route-id="@UserManager.GetUserId(User)"><i class="bi bi-shield-check"></i> Security</a></li>
+
                                     }
-                                    else if (User.IsInRole("employer"))
+                                    else if (User.IsInRole("Employer"))
                                     {
                                         <li><a class="dropdown-item" asp-controller="Employer" asp-action="Index" asp-route-userId="@UserManager.GetUserId(User)"><i class="bi bi-person"></i> Profile</a></li>
                                     }

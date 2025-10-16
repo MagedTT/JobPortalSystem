@@ -1,3 +1,4 @@
+using job_portal_system.Models.Domain;
 using job_portal_system.Models.DTOs;
 using job_portal_system.Models.ViewModels;
 using System.Security.Claims;
@@ -13,5 +14,8 @@ namespace job_portal_system.Services.Interfaces
         Task<UserProfileDto?> GetUserProfileAsync(ClaimsPrincipal userClaims);
         Task<(bool IsSuccess, string ErrorMessage)> ResetPasswordAsync(string email, string token, string newPassword);
         Task<(bool IsSuccess, string ErrorMessage)> ForgotPasswordAsync(string email, string callbackUrl);
+        Task<(bool IsSuccess, string ErrorMessage)> UpdateSecurityAsync(User user, SecurityDto dto);
+        Task<User?> GetUserAsync(ClaimsPrincipal principal);
+
     }
 }

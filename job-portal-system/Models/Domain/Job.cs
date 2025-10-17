@@ -2,7 +2,7 @@ namespace job_portal_system.Models.Domain
 {
     public class Job
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public int Id { get; set; }
         public string EmployerId { get; set; } = "";
         public Employer Employer { get; set; } = default!;
         public string Title { get; set; } = "";

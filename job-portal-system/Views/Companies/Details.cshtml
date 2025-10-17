@@ -1,0 +1,164 @@
+@model job_portal_system.Models.ViewModels.CompanyDetailsViewModel
+@{
+    ViewData["Title"] = Model.CompanyName;
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="job-details-page">
+    <div class="container">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a asp-action="Index" class="btn-job btn-job-view">
+                <i class="bi bi-arrow-left"></i> Back to Companies
+            </a>
+        </div>
+
+        <!-- Company Header -->
+        <div class="job-details-card">
+            <div class="text-center mb-4">
+                <div class="company-logo mx-auto mb-3" style="width: 120px; height: 120px; font-size: 3rem;">
+                    @Model.CompanyName.Substring(0, Math.Min(2, Model.CompanyName.Length)).ToUpper()
+                </div>
+                <h1 class="job-details-title">@Model.CompanyName</h1>
+                
+                <div class="job-details-meta" style="justify-content: center; margin-top: 20px;">
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <strong>@Model.Location</strong>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Industry))
+                    {
+                        <div class="meta-item">
+                            <i class="bi bi-briefcase-fill"></i>
+                            <strong>@Model.Industry</strong>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.CompanySize))
+                    {
+                        <div class="meta-item">
+                            <i class="bi bi-people-fill"></i>
+                            <strong>@Model.CompanySize employees</strong>
+                        </div>
+                    }
+                    <div class="meta-item">
+                        <i class="bi bi-briefcase"></i>
+                        <strong>@Model.Jobs.Count Active Jobs</strong>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Website))
+                {
+                    <div class="mt-3">
+                        <a href="@Model.Website" target="_blank" class="btn-job btn-job-view">
+                            <i class="bi bi-globe"></i> Visit Website
+                        </a>
+                    </div>
+                }
+
+                @if (User.IsInRole("JobSeeker"))
+                {
+                    <div class="mt-3">
+                        <a asp-action="SendMessage" asp-route-id="@Model.Id" class="btn-job btn-job-apply" style="padding: 14px 28px; font-size: 1rem;">
+                            <i class="bi bi-envelope-fill"></i> Contact Company
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <!-- About Company -->
+            <div class="details-section">
+                <h2 class="section-title">
+                    <i class="bi bi-info-circle"></i>
+                    About Company
+                </h2>
+                <div class="section-content" style="white-space: pre-line;">
+                    @Model.Description
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Jobs -->
+        @if (Model.Jobs.Any())
+        {
+            <div class="mt-4">
+                <h2 class="section-title" style="color: #ffffff; margin-bottom: 30px;">
+                    <i class="bi bi-briefcase"></i>
+                    Open Positions (@Model.Jobs.Count)
+                </h2>
+
+                <div class="row g-4">
+                    @foreach (var job in Model.Jobs)
+                    {
+                        <div class="col-lg-6">
+                            <div class="job-card">
+                                <div class="job-card-header">
+                                    <span class="job-badge @(job.JobType.ToLower() == "fulltime" || job.JobType == "0" ? "full-time" : "part-time")">
+                                        @(job.JobType == "0" || job.JobType.ToLower() == "fulltime" ? "Full Time" : "Part Time")
+                                    </span>
+                                </div>
+
+                                <div class="job-card-body">
+                                    <h3 class="job-title">@job.Title</h3>
+                                    
+                                    <p class="job-description">@job.Description</p>
+
+                                    <div class="job-meta">
+                                        <div class="meta-item">
+                                            <i class="bi bi-geo-alt-fill"></i>
+                                            <span>@job.Location</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <i class="bi bi-calendar-event"></i>
+                                            <span>@job.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <i class="bi bi-clock-history"></i>
+                                            <span>@job.YearsOfExperience+ years exp</span>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(job.CategoryName))
+                                        {
+                                            <div class="meta-item">
+                                                <i class="bi bi-tag-fill"></i>
+                                                <span>@job.CategoryName</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="job-card-footer">
+                                    <div class="job-salary">
+                                        <span class="job-salary-label">Salary</span>
+                                        @job.Salary.ToString("C0")
+                                    </div>
+
+                                    <div class="job-actions">
+                                        <a asp-controller="Job" asp-action="Details" asp-route-id="@job.Id" class="btn-job btn-job-view">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                        @if (User.IsInRole("JobSeeker"))
+                                        {
+                                            <a asp-controller="Job" asp-action="Apply" asp-route-id="@job.Id" class="btn-job btn-job-apply">
+                                                <i class="bi bi-send"></i> Apply
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="job-details-card mt-4 text-center" style="padding: 60px 20px;">
+                <div style="color: #8b949e; font-size: 3rem; margin-bottom: 20px;">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <h3 style="color: #ffffff; margin-bottom: 10px;">No Active Positions</h3>
+                <p style="color: #8b949e;">This company doesn't have any active job postings at the moment.</p>
+            </div>
+        }
+    </div>
+</div>

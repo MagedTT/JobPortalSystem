@@ -16,14 +16,117 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    position: relative;
+    padding-bottom: 8px;
 }
 
     .admin-link:hover {
         color: #4ade80;
     }
 
+    /* Active state with underline */
+    .admin-link.active {
+        color: #4ade80;
+        font-weight: 600;
+    }
+
+        .admin-link.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #238636, #2ea043);
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(35, 134, 54, 0.6);
+        }
+
+    .admin-link::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 0%;
+        height: 2px;
+        background: linear-gradient(90deg, #238636, #2ea043);
+        border-radius: 2px;
+        transform: translateX(-50%);
+        transition: width 0.25s ease-in-out;
+        box-shadow: 0 0 6px rgba(35, 134, 54, 0.4);
+    }
+
+    .admin-link:hover::after {
+        width: 80%;
+    }
+
 .card {
     transition: box-shadow 0.15s ease-in-out;
+}
+
+.admin-table {
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 1rem;
+}
+.admin-table th, .admin-table td {
+    vertical-align: middle;
+    border-color: #30363d;
+}
+.admin-table thead th {
+    background: #21262d;
+    color: #d29922;
+    font-weight: 600;
+    border-bottom: 2px solid #30363d;
+}
+.admin-table tbody tr {
+    transition: background 0.15s;
+}
+.admin-table tbody tr:hover {
+    background: #161b22;
+}
+.badge {
+    font-size: 0.95rem;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.admin-stat-card {
+    background: linear-gradient(135deg, #161b22 60%, #21262d 100%);
+    color: #f0f6fc;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(35, 134, 54, 0.08);
+    border: 1px solid #21262d;
+    margin-bottom: 0.5rem;
+}
+.admin-stat-card h6 {
+    color: #8b949e;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.admin-stat-card h3 {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+.admin-stat-card i {
+    font-size: 2.2rem;
+    opacity: 0.85;
+}
+.admin-stat-card .btn {
+    font-size: 0.95rem;
+    border-radius: 8px;
+    font-weight: 500;
+}
+.admin-stat-card .btn-outline-warning {
+    border: 1.5px solid #d29922;
+    color: #d29922;
+    background: transparent;
+}
+.admin-stat-card .btn-outline-warning:hover {
+    background: #d29922;
+    color: #fff;
 }
 
     .card:hover {
@@ -53,4 +156,35 @@ h6 {
     background-color: #161b22;
     border: 1px solid #30363d;
     color: #c9d1d9;
+}
+
+.quick-links-admin {
+    background: linear-gradient(135deg, #161b22 60%, #21262d 100%);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(35, 134, 54, 0.08);
+    border: 1px solid #21262d;
+    margin-bottom: 1.5rem;
+}
+.quick-links-admin h4 {
+    color: #d29922;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+.quick-links-admin h6 {
+    color: #8b949e;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.quick-link-admin {
+    color: #56b6e7;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    display: block;
+    margin-bottom: 6px;
+}
+.quick-link-admin:hover {
+    color: #2ea043;
+    text-decoration: underline;
 }

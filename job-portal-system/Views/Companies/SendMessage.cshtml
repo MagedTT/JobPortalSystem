@@ -1,0 +1,121 @@
+@model job_portal_system.Models.ViewModels.SendMessageViewModel
+@{
+    ViewData["Title"] = "Send Message";
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="job-details-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Back Button -->
+                <div class="mb-4">
+                    <a asp-action="Index" class="btn-job btn-job-view">
+                        <i class="bi bi-arrow-left"></i> Back to Companies
+                    </a>
+                </div>
+
+                <!-- Message Form Card -->
+                <div class="job-details-card">
+                    <div class="text-center mb-4">
+                        <div style="color: #2ea043; font-size: 4rem; margin-bottom: 20px;">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+                        <h2 class="section-title mb-2" style="justify-content: center;">
+                            Send Message
+                        </h2>
+                        <p style="color: #8b949e; font-size: 1.1rem;">Contact <strong style="color: #2ea043;">@Model.ReceiverName</strong></p>
+                    </div>
+
+                    <form asp-action="SendMessage" method="post">
+                        <input type="hidden" asp-for="SenderId" />
+                        <input type="hidden" asp-for="ReceiverId" />
+                        <input type="hidden" asp-for="ReceiverName" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Subject -->
+                        <div class="mb-4">
+                            <label asp-for="Subject" class="form-label" style="color: #ffffff; font-weight: 600; margin-bottom: 10px;">
+                                <i class="bi bi-bookmark"></i> Subject
+                            </label>
+                            <input asp-for="Subject" 
+                                   class="form-control" 
+                                   placeholder="Enter message subject..."
+                                   style="background: #0d1117; border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; border-radius: 10px; padding: 12px 15px;">
+                            <span asp-validation-for="Subject" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Message Content -->
+                        <div class="mb-4">
+                            <label asp-for="Content" class="form-label" style="color: #ffffff; font-weight: 600; margin-bottom: 10px;">
+                                <i class="bi bi-chat-left-text"></i> Message
+                            </label>
+                            <textarea asp-for="Content" 
+                                      class="form-control" 
+                                      rows="10" 
+                                      placeholder="Write your message here..."
+                                      style="background: #0d1117; border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; border-radius: 10px; padding: 15px; resize: vertical;"></textarea>
+                            <span asp-validation-for="Content" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-2">
+                                <i class="bi bi-info-circle"></i> Be professional and clear in your communication.
+                            </small>
+                        </div>
+
+                        <!-- Info Box -->
+                        <div class="alert" style="background: rgba(46, 160, 67, 0.1); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px; padding: 15px; margin-bottom: 25px;">
+                            <div class="d-flex align-items-start gap-3">
+                                <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; flex-shrink: 0;"></i>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 8px;">Tips for Effective Communication:</strong>
+                                    <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                                        <li>Be concise and professional</li>
+                                        <li>Clearly state your purpose</li>
+                                        <li>Include relevant details about your background</li>
+                                        <li>Proofread before sending</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a asp-action="Index" class="btn-job btn-job-view" style="padding: 14px 28px;">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn-job btn-job-apply" style="padding: 14px 28px;">
+                                <i class="bi bi-send-fill"></i> Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Success Message -->
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success mt-4" style="background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px;">
+                        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    .form-control:focus {
+        background: #0d1117 !important;
+        border-color: #2ea043 !important;
+        box-shadow: 0 0 0 3px rgba(46, 160, 67, 0.1) !important;
+        color: #ffffff !important;
+    }
+
+    .form-control::placeholder {
+        color: #8b949e;
+    }
+</style>

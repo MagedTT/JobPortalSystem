@@ -1,0 +1,237 @@
+@using job_portal_system.Models.Domain
+@model IEnumerable<job_portal_system.Models.Domain.Application>
+@{
+    ViewData["Title"] = "Applicants";
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="jobs-page">
+    <div class="container" style="padding-top: 80px;">
+        <!-- Page Header -->
+        <div class="jobs-header">
+            <h1>
+                <i class="bi bi-people-fill" style="color: #2ea043;"></i>
+                Job <span style="background: linear-gradient(135deg, #238636 0%, #2ea043 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Applicants</span>
+            </h1>
+            <p>Manage and review applications for your job postings</p>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success" style="background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px; margin-bottom: 30px;">
+                <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" style="background: rgba(248, 81, 73, 0.15); border: 1px solid rgba(248, 81, 73, 0.3); color: #f85149; border-radius: 10px; margin-bottom: 30px;">
+                <i class="bi bi-exclamation-circle-fill"></i> @TempData["Error"]
+            </div>
+        }
+
+        <!-- Filters -->
+        <div class="job-details-card" style="padding: 20px; margin-bottom: 30px;">
+            <form method="get" asp-action="Applicants">
+                <div class="row align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label" style="color: #c9d1d9; font-weight: 600; margin-bottom: 8px;">
+                            <i class="bi bi-funnel"></i> Filter by Status
+                        </label>
+                        <select name="status" class="form-control" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px; border-radius: 8px;">
+                            <option value="">All Status</option>
+                            <option value="Pending" selected="@(ViewBag.SelectedStatus == "Pending")">Pending</option>
+                            <option value="Accepted" selected="@(ViewBag.SelectedStatus == "Accepted")">Accepted</option>
+                            <option value="Rejected" selected="@(ViewBag.SelectedStatus == "Rejected")">Rejected</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="form-label" style="color: #c9d1d9; font-weight: 600; margin-bottom: 8px;">
+                            <i class="bi bi-briefcase"></i> Filter by Job
+                        </label>
+                        <select name="jobId" class="form-control" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px; border-radius: 8px;">
+                            <option value="">All Jobs</option>
+                            @foreach (var job in ViewBag.EmployerJobs)
+                            {
+                                <option value="@job.Id" selected="@(ViewBag.SelectedJobId == job.Id)">@job.Title</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn-job btn-job-apply w-100" style="justify-content: center;">
+                            <i class="bi bi-search"></i> Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="job-details-card" style="padding: 20px; text-align: center;">
+                    <div style="color: #388bfd; font-size: 2rem; margin-bottom: 10px;">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3 style="color: #ffffff; font-size: 1.8rem; margin-bottom: 5px;">@Model.Count()</h3>
+                    <p style="color: #8b949e; margin: 0;">Total Applicants</p>
+                </div>
+            </div>
+                <div class="col-md-3">
+                <div class="job-details-card" style="padding: 20px; text-align: center;">
+                    <div style="color: #fbbc05; font-size: 2rem; margin-bottom: 10px;">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <h3 style="color: #ffffff; font-size: 1.8rem; margin-bottom: 5px;">@Model.Count(a => a.Status == Status.Pending)</h3>
+                    <p style="color: #8b949e; margin: 0;">Pending</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="job-details-card" style="padding: 20px; text-align: center;">
+                    <div style="color: #2ea043; font-size: 2rem; margin-bottom: 10px;">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <h3 style="color: #ffffff; font-size: 1.8rem; margin-bottom: 5px;">@Model.Count(a => a.Status == Status.Accepted)</h3>
+                    <p style="color: #8b949e; margin: 0;">Accepted</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="job-details-card" style="padding: 20px; text-align: center;">
+                    <div style="color: #f85149; font-size: 2rem; margin-bottom: 10px;">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+                    <h3 style="color: #ffffff; font-size: 1.8rem; margin-bottom: 5px;">@Model.Count(a => a.Status == Status.Rejected)</h3>
+                    <p style="color: #8b949e; margin: 0;">Rejected</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Applicants List -->
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <h3>No Applicants Found</h3>
+                <p>No one has applied to your jobs yet, or no results match your filters.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var application in Model)
+                {
+                    <div class="col-12">
+                        <div class="job-card" style="padding: 25px;">
+                            <div class="row align-items-center">
+                                <!-- Left: Applicant Info -->
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #238636, #2ea043); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ffffff; font-weight: bold; flex-shrink: 0;">
+                                            @(application.JobSeeker.FirstName?.Substring(0, 1).ToUpper() ?? "A")@(application.JobSeeker.LastName?.Substring(0, 1).ToUpper() ?? "")
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h3 class="job-title" style="margin-bottom: 8px;">
+                                                @application.JobSeeker.FirstName @application.JobSeeker.LastName
+                                            </h3>
+                                            <div class="job-company" style="margin-bottom: 12px;">
+                                                <i class="bi bi-briefcase"></i>
+                                                <span>@application.Job.Title</span>
+                                            </div>
+                                            <div class="job-meta">
+                                                <div class="meta-item">
+                                                    <i class="bi bi-envelope"></i>
+                                                    <span>@application.JobSeeker.User.Email</span>
+                                                </div>
+                                                <div class="meta-item">
+                                                    <i class="bi bi-telephone"></i>
+                                                    <span>@(application.JobSeeker.User.PhoneNumber ?? "N/A")</span>
+                                                </div>
+                                                <div class="meta-item">
+                                                    <i class="bi bi-calendar3"></i>
+                                                    <span>Applied: @application.ApplicationDate.ToString("MMM dd, yyyy")</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Middle: Status & CV -->
+                                <div class="col-md-3">
+                                    <div style="padding: 15px 0;">
+                                        <div style="margin-bottom: 15px;">
+                                            <small style="color: #8b949e; display: block; margin-bottom: 5px;">Status</small>
+                                            @if (application.Status == Status.Pending)
+                                            {
+                                                <span class="job-badge" style="background: rgba(56, 139, 253, 0.15); color: #388bfd; border: 1px solid rgba(56, 139, 253, 0.3);">
+                                                    <i class="bi bi-clock"></i> Pending
+                                                </span>
+                                            }
+                                            else if (application.Status == Status.Accepted)
+                                            {
+                                                <span class="job-badge" style="background: rgba(46, 160, 67, 0.15); color: #2ea043; border: 1px solid rgba(46, 160, 67, 0.3);">
+                                                    <i class="bi bi-check-circle"></i> Accepted
+                                                </span>
+                                            }
+                                            else if (application.Status == Status.Rejected)
+                                            {
+                                                <span class="job-badge" style="background: rgba(248, 81, 73, 0.15); color: #f85149; border: 1px solid rgba(248, 81, 73, 0.3);">
+                                                    <i class="bi bi-x-circle"></i> Rejected
+                                                </span>
+                                            }
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(application.CVPath))
+                                        {
+                                            <a href="@application.CVPath" target="_blank" class="btn-job btn-job-view" style="justify-content: center; font-size: 0.85rem; padding: 8px 16px;">
+                                                <i class="bi bi-file-earmark-pdf"></i> Download CV
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Right: Actions -->
+                                <div class="col-md-3 text-end">
+                                    <div class="d-flex flex-column gap-2">
+                                        <a href="#" class="btn-job btn-job-view" style="justify-content: center;" data-bs-toggle="tooltip" title="View Profile">
+                                            <i class="bi bi-person"></i> View Profile
+                                        </a>
+                                        
+                                        
+                                        @if (application.Status == Status.Pending)
+                                        {
+                                            <form asp-action="UpdateApplicationStatus" method="post" class="w-100" onsubmit="return confirm('Accept this application?');">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@application.Id" />
+                                                <input type="hidden" name="status" value="Accepted" />
+                                                <button type="submit" class="btn-job w-100" style="background: rgba(46, 160, 67, 0.15); color: #2ea043; border: 2px solid rgba(46, 160, 67, 0.3); justify-content: center;">
+                                                    <i class="bi bi-check-circle"></i> Accept
+                                                </button>
+                                            </form>
+
+                                            <form asp-action="UpdateApplicationStatus" method="post" class="w-100" onsubmit="return confirm('Reject this application?');">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@application.Id" />
+                                                <input type="hidden" name="status" value="Rejected" />
+                                                <button type="submit" class="btn-job w-100" style="background: rgba(248, 81, 73, 0.15); color: #f85149; border: 2px solid rgba(248, 81, 73, 0.3); justify-content: center;">
+                                                    <i class="bi bi-x-circle"></i> Reject
+                                                </button>
+                                            </form>
+                                        }
+
+                                        <a href="#" class="btn-job btn-job-apply" style="justify-content: center;" data-bs-toggle="tooltip" title="Send Message">
+                                            <i class="bi bi-envelope"></i> Message
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

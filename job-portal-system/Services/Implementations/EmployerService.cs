@@ -1,6 +1,5 @@
 using job_portal_system.Data;
 using job_portal_system.Models.Domain;
-using job_portal_system.Models.ViewModels;
 using job_portal_system.Repositories.Interfaces;
 using job_portal_system.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +24,7 @@ namespace job_portal_system.Services.Implementations
 
         public async Task<Employer?> GetByUserIdAsync(string userId)
         {
-            return await _employerRepository.GetByIdAsync(userId);
+            return await _employerRepository.GetByUserIdAsync(userId);
         }
 
         public async Task<Employer?> GetEmployerByEmailAsync(string email)
@@ -38,14 +37,10 @@ namespace job_portal_system.Services.Implementations
             return await _employerRepository.GetAllAsync();
         }
 
-        public async Task<Employer?> GetEmployerProfileAsync(string userId)
+        public async Task UpdateEmployerAsync(Employer employer)
         {
-            return await _employerRepository.GetEmployerProfileAsync(userId);
-        }
-
-        public async Task EditEmployerProfile(EditEmployerViewModel model, Employer employer)
-        {
-            await _employerRepository.EditEmployerProfile(model, employer);
+            _employerRepository.Update(employer);
+            await _employerRepository.SaveAsync();
         }
     }
 }

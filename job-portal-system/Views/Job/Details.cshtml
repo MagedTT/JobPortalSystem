@@ -1,42 +1,178 @@
 @model job_portal_system.Models.ViewModels.JobViewModel
-
+@using Microsoft.AspNetCore.Identity
 @{
-    ViewData["Title"] = "Job Details";
+    ViewData["Title"] = Model.Title;
 }
 
-<div class="container mt-5">
-    <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-header bg-primary text-white rounded-top-4 py-3">
-            <h3 class="mb-0">@Model.Title</h3>
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="job-details-page">
+    <div class="container">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a asp-action="Index" class="btn-job btn-job-view">
+                <i class="bi bi-arrow-left"></i> Back to Jobs
+            </a>
         </div>
 
-        <div class="card-body p-4">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <h6 class="text-muted mb-1">Posted On</h6>
-                    <p class="mb-0">@Model.CreatedAt.ToShortDateString()</p>
+        <!-- Job Details Card -->
+        <div class="job-details-card">
+            <!-- Header -->
+            <div class="job-details-header">
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="company-logo" style="width: 80px; height: 80px; font-size: 2rem;">
+                            @Model.CompanyName.Substring(0, Math.Min(2, Model.CompanyName.Length)).ToUpper()
+                        </div>
+                        <div>
+                            <h1 class="job-details-title mb-0">@Model.Title</h1>
+                            <div class="job-details-company">
+                                <i class="bi bi-building"></i>
+                                <span>@Model.CompanyName</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="job-details-meta">
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <strong>@Model.Location</strong>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-calendar-event"></i>
+                            <span>Posted: <strong>@Model.CreatedAt.ToString("MMM dd, yyyy")</strong></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-clock-history"></i>
+                            <span><strong>@Model.YearsOfExperience+</strong> years experience</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-briefcase-fill"></i>
+                            <strong>@(Model.JobType == "0" || Model.JobType.ToLower() == "fulltime" ? "Full Time" : "Part Time")</strong>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.CategoryName))
+                        {
+                            <div class="meta-item">
+                                <i class="bi bi-tag-fill"></i>
+                                <strong>@Model.CategoryName</strong>
+                            </div>
+                        }
+                    </div>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <h6 class="text-muted mb-1">Salary</h6>
-                    <p class="fw-semibold text-success mb-0">@Model.Salary.ToString("C")</p>
+
+                <div class="text-end">
+                    <div class="job-salary" style="font-size: 2rem;">
+                        @Model.Salary.ToString("C0")
+                    </div>
+                    <span class="job-salary-label">Per Month</span>
+
+                    <div class="mt-3">
+                        @if (User.IsInRole("JobSeeker"))
+                        {
+                            @if (Model.HasApplied)
+                            {
+                                <button class="btn-job btn-job-applied" disabled style="padding: 14px 28px; font-size: 1rem;">
+                                    <i class="bi bi-check-circle-fill"></i> Already Applied
+                                </button>
+                            }
+                            else
+                            {
+                                <a asp-action="Apply" asp-route-id="@Model.Id" class="btn-job btn-job-apply" style="padding: 14px 28px; font-size: 1rem;">
+                                    <i class="bi bi-send-fill"></i> Apply Now
+                                </a>
+                            }
+                        }
+                        else if (!User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Apply", "Job", new { id = Model.Id })" 
+                               class="btn-job btn-job-apply" style="padding: 14px 28px; font-size: 1rem;">
+                                <i class="bi bi-send-fill"></i> Apply Now
+                            </a>
+                        }
+                        else if (User.IsInRole("Employer") && User.Identity.Name == Model.EmployerId)
+                        {
+                            <div class="d-flex flex-column gap-2">
+                                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-job btn-job-view" style="padding: 12px 24px;">
+                                    <i class="bi bi-pencil"></i> Edit Job
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn-job" 
+                                   style="padding: 12px 24px; background: rgba(248, 81, 73, 0.15); color: #f85149; border: 2px solid rgba(248, 81, 73, 0.3);">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
 
-            <hr />
+            <!-- Job Description -->
+            <div class="details-section">
+                <h2 class="section-title">
+                    <i class="bi bi-file-text"></i>
+                    Job Description
+                </h2>
+                <div class="section-content" style="white-space: pre-line;">
+                    @Model.Description
+                </div>
+            </div>
 
-            <div>
-                <h6 class="text-muted mb-2">Description</h6>
-                <p class="text-secondary" style="white-space: pre-line;">@Model.Description</p>
+            <!-- Requirements (Example - you can expand this based on your JobRequirements) -->
+            <div class="details-section">
+                <h2 class="section-title">
+                    <i class="bi bi-list-check"></i>
+                    Requirements
+                </h2>
+                <ul class="requirements-list">
+                    <li>Minimum @Model.YearsOfExperience years of relevant work experience</li>
+                    <li>Strong problem-solving and analytical skills</li>
+                    <li>Excellent communication and teamwork abilities</li>
+                    <li>Bachelor's degree in related field or equivalent experience</li>
+                    <li>Proficiency in relevant technologies and tools</li>
+                </ul>
+            </div>
+
+            <!-- Benefits (Example) -->
+            <div class="details-section">
+                <h2 class="section-title">
+                    <i class="bi bi-gift"></i>
+                    Benefits
+                </h2>
+                <ul class="requirements-list">
+                    <li>Competitive salary package</li>
+                    <li>Health insurance coverage</li>
+                    <li>Professional development opportunities</li>
+                    <li>Flexible working hours</li>
+                    <li>Modern work environment</li>
+                </ul>
+            </div>
+
+            <!-- About Company -->
+            <div class="details-section">
+                <h2 class="section-title">
+                    <i class="bi bi-building"></i>
+                    About @Model.CompanyName
+                </h2>
+                <div class="section-content">
+                    We are a leading company in our industry, committed to excellence and innovation. 
+                    Our team is dedicated to creating a positive impact and fostering a collaborative work environment.
+                    Join us to be part of something amazing!
+                </div>
             </div>
         </div>
 
-        <div class="card-footer bg-light text-end rounded-bottom-4 py-3">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
-                <i class="bi bi-pencil-square"></i> Edit
-            </a>
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Back to List
-            </a>
-        </div>
+        <!-- Application CTA -->
+        @if (User.IsInRole("JobSeeker") && !Model.HasApplied)
+        {
+            <div class="text-center mt-4">
+                <div class="job-details-card" style="padding: 30px;">
+                    <h3 style="color: #ffffff; margin-bottom: 15px;">Interested in this position?</h3>
+                    <p style="color: #8b949e; margin-bottom: 25px;">Apply now and take the first step towards your dream career!</p>
+                    <a asp-action="Apply" asp-route-id="@Model.Id" class="btn-job btn-job-apply" style="padding: 16px 40px; font-size: 1.1rem;">
+                        <i class="bi bi-send-fill"></i> Submit Application
+                    </a>
+                </div>
+            </div>
+        }
     </div>
 </div>
+

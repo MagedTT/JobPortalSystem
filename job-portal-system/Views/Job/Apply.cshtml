@@ -1,0 +1,128 @@
+@model job_portal_system.Models.ViewModels.ApplyJobViewModel
+@{
+    ViewData["Title"] = "Apply for Job";
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="job-details-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Back Button -->
+                <div class="mb-4">
+                    <a asp-action="Details" asp-route-id="@Model.JobId" class="btn-job btn-job-view">
+                        <i class="bi bi-arrow-left"></i> Back to Job Details
+                    </a>
+                </div>
+
+                <!-- Application Form Card -->
+                <div class="job-details-card">
+                    <div class="text-center mb-4">
+                        <div class="company-logo mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                            @Model.CompanyName.Substring(0, Math.Min(2, Model.CompanyName.Length)).ToUpper()
+                        </div>
+                        <h2 class="section-title mb-2" style="justify-content: center;">
+                            <i class="bi bi-send-fill"></i>
+                            Apply for Position
+                        </h2>
+                        <h3 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 10px;">@Model.JobTitle</h3>
+                        <p style="color: #2ea043; font-size: 1.1rem;">@Model.CompanyName</p>
+                    </div>
+
+                    <form asp-action="Apply" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="JobId" />
+                        <input type="hidden" asp-for="JobSeekerId" />
+                        <input type="hidden" asp-for="JobTitle" />
+                        <input type="hidden" asp-for="CompanyName" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Cover Letter -->
+                        <div class="mb-4">
+                            <label asp-for="CoverLetter" class="form-label" style="color: #ffffff; font-weight: 600; margin-bottom: 10px;">
+                                <i class="bi bi-file-text"></i> Cover Letter (Optional)
+                            </label>
+                            <textarea asp-for="CoverLetter" 
+                                      class="form-control" 
+                                      rows="8" 
+                                      placeholder="Tell us why you're the perfect fit for this role..."
+                                      style="background: #0d1117; border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; border-radius: 10px; padding: 15px; resize: vertical;"></textarea>
+                            <span asp-validation-for="CoverLetter" class="text-danger small"></span>
+                            <small class="text-muted d-block mt-2">
+                                <i class="bi bi-info-circle"></i> Optional: Share your motivation, relevant experience, and why you'd like to join the team.
+                            </small>
+                        </div>
+
+                        <!-- CV Upload -->
+                        <div class="mb-4">
+                            <label for="cvFile" class="form-label" style="color: #ffffff; font-weight: 600; margin-bottom: 10px;">
+                                <i class="bi bi-file-earmark-pdf"></i> Upload CV/Resume (Optional)
+                            </label>
+                            <input type="file" 
+                                   id="cvFile" 
+                                   name="cvFile" 
+                                   class="form-control" 
+                                   accept=".pdf,.doc,.docx"
+                                   style="background: #0d1117; border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; border-radius: 10px; padding: 12px;">
+                            <small class="text-muted d-block mt-2">
+                                <i class="bi bi-info-circle"></i> Accepted formats: PDF, DOC, DOCX (Max 5MB)
+                            </small>
+                        </div>
+
+                        <!-- Info Box -->
+                        <div class="alert" style="background: rgba(46, 160, 67, 0.1); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px; padding: 15px; margin-bottom: 25px;">
+                            <div class="d-flex align-items-start gap-3">
+                                <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; flex-shrink: 0;"></i>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 8px;">Application Tips:</strong>
+                                    <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                                        <li>A well-written cover letter increases your chances</li>
+                                        <li>Highlight relevant skills and experience</li>
+                                        <li>Keep your CV up-to-date and professional</li>
+                                        <li>Be honest and authentic in your application</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a asp-action="Details" asp-route-id="@Model.JobId" class="btn-job btn-job-view" style="padding: 14px 28px;">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn-job btn-job-apply" style="padding: 14px 28px;">
+                                <i class="bi bi-send-fill"></i> Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Success Message -->
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success mt-4" style="background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px;">
+                        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    .form-control:focus {
+        background: #0d1117 !important;
+        border-color: #2ea043 !important;
+        box-shadow: 0 0 0 3px rgba(46, 160, 67, 0.1) !important;
+        color: #ffffff !important;
+    }
+
+    .form-control::placeholder {
+        color: #8b949e;
+    }
+</style>

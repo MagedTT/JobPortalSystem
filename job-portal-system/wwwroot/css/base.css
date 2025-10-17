@@ -1,22 +1,50 @@
 :root {
-    --bg-body: #f6f7f9;
-    --text-dark: #1e293b;
-    --text-muted: #64748b;
-    --nav-bg: #1e293b;
-    --nav-hover: #334155;
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-    --card-bg: #ffffff;
-    --border-color: #e2e8f0;
+    /* Dark Theme Colors */
+    --bg-body: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #21262d;
+    
+    /* Text Colors */
+    --text-primary: #f0f6fc;
+    --text-secondary: #c9d1d9;
+    --text-muted: #8b949e;
+    --text-disabled: #6e7681;
+    
+    /* Navigation */
+    --nav-bg: #0d1117;
+    --nav-hover: #21262d;
+    
+    /* Accent Colors */
+    --accent: #2ea043;
+    --accent-hover: #3fb950;
+    --accent-start: #238636;
+    --accent-end: #2ea043;
+    
+    /* Card & Components */
+    --card-bg: rgba(22, 27, 34, 0.95);
+    --border-color: rgba(255, 255, 255, 0.1);
+    
+    /* State Colors */
+    --error: #f85149;
+    --success: #3fb950;
+    --warning: #d29922;
+    --info: #58a6ff;
+}
+
+html {
+    background-color: var(--bg-body);
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-body);
-    color: var(--text-dark);
+    color: var(--text-primary);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
 
 /* Smooth hover transitions */
@@ -31,12 +59,5 @@ body {
 main {
     flex: 1;
     padding-top: 2rem;
-    padding-bottom: 2rem;
-}
-
-
-.profile-image {
-    height: 150px;
-    width: 150px;
-    object-fit: cover;
+    background-color: var(--bg-body);
 }

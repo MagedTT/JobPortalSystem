@@ -1,0 +1,109 @@
+@model job_portal_system.Models.ViewModels.MessageViewModel
+@{
+    ViewData["Title"] = Model.Subject;
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="job-details-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Back Button -->
+                <div class="mb-4">
+                    <a asp-action="@(Model.IsSentByMe ? "Sent" : "Inbox")" class="btn-job btn-job-view">
+                        <i class="bi bi-arrow-left"></i> Back to @(Model.IsSentByMe ? "Sent" : "Inbox")
+                    </a>
+                </div>
+
+                <!-- Message Card -->
+                <div class="job-details-card">
+                    <!-- Header -->
+                    <div class="text-center mb-4 pb-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div class="company-logo mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                            @(Model.IsSentByMe ? 
+                                Model.ReceiverName.Substring(0, Math.Min(2, Model.ReceiverName.Length)).ToUpper() : 
+                                Model.SenderName.Substring(0, Math.Min(2, Model.SenderName.Length)).ToUpper())
+                        </div>
+                        
+                        @if (Model.IsSentByMe)
+                        {
+                            <div style="color: #8b949e; margin-bottom: 10px;">
+                                <i class="bi bi-send"></i> Sent to
+                            </div>
+                            <h2 style="color: #2ea043; font-size: 1.5rem; margin-bottom: 5px;">@Model.ReceiverName</h2>
+                        }
+                        else
+                        {
+                            <div style="color: #8b949e; margin-bottom: 10px;">
+                                <i class="bi bi-inbox"></i> From
+                            </div>
+                            <h2 style="color: #2ea043; font-size: 1.5rem; margin-bottom: 5px;">@Model.SenderName</h2>
+                        }
+                        
+                        <div style="color: #8b949e; font-size: 0.9rem;">
+                            @Model.SentAt.ToString("MMMM dd, yyyy 'at' hh:mm tt")
+                        </div>
+
+                        @if (Model.IsSentByMe && Model.IsRead)
+                        {
+                            <div class="mt-2">
+                                <span class="job-badge" style="background: rgba(46, 160, 67, 0.15); color: #2ea043; border: 1px solid rgba(46, 160, 67, 0.3);">
+                                    <i class="bi bi-check-all"></i> Read by Recipient
+                                </span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Subject -->
+                    <div class="details-section">
+                        <h3 class="section-title" style="font-size: 1.3rem;">
+                            <i class="bi bi-bookmark-fill"></i>
+                            Subject
+                        </h3>
+                        <div class="section-content" style="font-size: 1.1rem; font-weight: 600; color: #ffffff;">
+                            @Model.Subject
+                        </div>
+                    </div>
+
+                    <!-- Message Content -->
+                    <div class="details-section">
+                        <h3 class="section-title" style="font-size: 1.3rem;">
+                            <i class="bi bi-chat-left-text-fill"></i>
+                            Message
+                        </h3>
+                        <div class="section-content" style="white-space: pre-line; background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); line-height: 1.8;">
+                            @Model.Content
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-4 pt-4" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a asp-action="@(Model.IsSentByMe ? "Sent" : "Inbox")" class="btn-job btn-job-view">
+                                <i class="bi bi-arrow-left"></i> Back
+                            </a>
+                            <form asp-action="Delete" asp-route-id="@Model.Id" asp-route-isSent="@Model.IsSentByMe" method="post" onsubmit="return confirm('Are you sure you want to delete this message?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-job" style="background: rgba(248, 81, 73, 0.15); color: #f85149; border: 2px solid rgba(248, 81, 73, 0.3);">
+                                    <i class="bi bi-trash"></i> Delete Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                @if (!Model.IsSentByMe)
+                {
+                    <div class="job-details-card mt-4">
+                        <div class="alert" style="background: rgba(56, 139, 253, 0.1); border: 1px solid rgba(56, 139, 253, 0.3); color: #388bfd; border-radius: 10px; padding: 15px; margin: 0;">
+                            <i class="bi bi-info-circle-fill"></i> This message was sent by <strong>@Model.SenderName</strong>. 
+                            You can reply by contacting them directly through the Companies page.
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

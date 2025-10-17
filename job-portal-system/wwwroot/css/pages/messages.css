@@ -1,0 +1,158 @@
+/* Moved from Views/Messages/Reply.cshtml */
+.original-message-ref {
+    background: rgba(56, 139, 253, 0.08);
+    border: 1px solid rgba(56, 139, 253, 0.2);
+    border-left: 4px solid #388bfd;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.ref-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #388bfd;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.ref-header i {
+    font-size: 1.2rem;
+}
+
+.ref-content {
+    color: #c9d1d9;
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+
+.ref-content strong {
+    color: #f0f6fc;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.reply-card {
+    animation: fadeSlideUp 0.5s ease-out;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.char-count {
+    display: block;
+    text-align: right;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #8b949e;
+    font-weight: 500;
+}
+
+.char-count span {
+    font-weight: 700;
+}
+
+/* Auto-resize textarea */
+textarea.form-input-message {
+    resize: none;
+    overflow: hidden;
+    min-height: 180px;
+}
+
+/* Submit button loading state */
+.spinner-border {
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+}
+
+/* Reply Form Design */
+.reply-form {
+    background: var(--card-bg, #161b22);
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    margin-top: 10px;
+}
+
+.form-group-message {
+    margin-bottom: 22px;
+}
+
+.form-label-message {
+    display: block;
+    font-weight: 600;
+    color: #c9d1d9;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.form-input-message {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    background: #0d1117;
+    color: #f0f6fc;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+.form-input-message:focus {
+    border-color: #388bfd;
+    outline: none;
+}
+
+.validation-message-message {
+    color: #f85149;
+    font-size: 0.95rem;
+    margin-top: 4px;
+    display: block;
+}
+
+.form-actions-message {
+    display: flex;
+    gap: 16px;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+.btn-message {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-message-primary {
+    background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+    color: #fff;
+    border: none;
+}
+.btn-message-primary:hover {
+    background: linear-gradient(135deg, #2ea043 0%, #238636 100%);
+    color: #fff;
+}
+.btn-message-secondary {
+    background: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+}
+.btn-message-secondary:hover {
+    background: #30363d;
+    color: #fff;
+}

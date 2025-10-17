@@ -2,26 +2,112 @@
     ViewData["Title"] = "Register";
 }
 
-<link href="~/css/pages/register.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/pages/register-selection.css" />
 
-<section class="register-section">
-    <div class="register-card">
-        <h2 class="fw-bold mb-3">Create Your Account</h2>
-        <p class="text-muted mb-4">Choose your role to continue</p>
+<div class="register-selection-section">
+    <div class="container">
+        <!-- Header -->
+        <div class="selection-header">
+            <div class="logo-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+                    <defs>
+                        <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                            <stop offset="0" stop-color="#238636"/>
+                            <stop offset="1" stop-color="#2ea043"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="32" cy="32" r="20" fill="url(#g1)" opacity="0.12"/>
+                    <circle cx="32" cy="32" r="16" fill="url(#g1)"/>
+                    <g transform="translate(0,0)">
+                        <rect x="23.6" y="27.8" width="16.8" height="8.4" rx="1.2" ry="1.2" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+                        <path d="M27.2 26.4 h9.6 a1.2 1.2 0 0 1 1.2 1.2 v0.4" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+                        <rect x="30.6" y="30.6" width="2.8" height="3.2" rx="0.6" fill="#ffffff"/>
+                    </g>
+                </svg>
+            </div>
+            <h1 class="selection-title">Join <span class="gradient-text">Jobverse</span></h1>
+            <p class="selection-subtitle">Choose your account type to get started</p>
+        </div>
 
-        <div class="d-flex flex-column gap-3">
-            <a asp-controller="Account" asp-action="RegisterJobSeeker" class="btn btn-primary py-2">
-                <i class="bi bi-person-fill"></i> Register as Job Seeker
+        <!-- Role Selection Cards -->
+        <div class="role-cards-container">
+            <!-- Job Seeker Card -->
+            <a asp-controller="Account" asp-action="RegisterJobSeeker" class="role-card job-seeker-card">
+                <div class="role-card-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h3 class="role-card-title">Job Seeker</h3>
+                <p class="role-card-description">Find your dream job and advance your career</p>
+                
+                <ul class="role-features">
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Browse thousands of jobs</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Apply with one click</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Track applications</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Get job recommendations</span>
+                    </li>
+                </ul>
+
+                <div class="role-card-action">
+                    <span>Register as Job Seeker</span>
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="card-glow"></div>
             </a>
-            <a asp-controller="Account" asp-action="RegisterEmployer" class="btn btn-outline-primary py-2">
-                <i class="bi bi-building"></i> Register as Employer
+
+            <!-- Employer Card -->
+            <a asp-controller="Account" asp-action="RegisterEmployer" class="role-card employer-card">
+                <div class="role-card-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+                <h3 class="role-card-title">Employer</h3>
+                <p class="role-card-description">Find the perfect candidates for your company</p>
+                
+                <ul class="role-features">
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Post unlimited jobs</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Access qualified talent</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Manage applications</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Build your team</span>
+                    </li>
+                </ul>
+
+                <div class="role-card-action">
+                    <span>Register as Employer</span>
+                    <i class="bi bi-arrow-right"></i>
+                </div>
+
+                <div class="card-glow"></div>
             </a>
         </div>
-        <div class="text-center mt-3">
-            <small class="text-muted">
+
+        <!-- Footer -->
+        <div class="selection-footer">
+            <p class="footer-text">
                 Already have an account?
-                <a asp-controller="Account" asp-action="Login" class="text-decoration-none text-primary fw-semibold login-link">Login</a>
-            </small>
+                <a asp-controller="Account" asp-action="Login" class="footer-link">Sign in here</a>
+            </p>
         </div>
     </div>
-</section>
+</div>

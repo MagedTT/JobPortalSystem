@@ -16,4 +16,5 @@ public class JobSeeker
     public ICollection<FavoriteJob> FavoriteJobs { get; set; } = new List<FavoriteJob>();
     public ICollection<Application> Applications { get; set; } = new List<Application>();
     // public ICollection<JobSeekerSkill> JobSeekerSkills { get; set; } = new List<JobSeekerSkill>();
+    public bool IsApproved { get; set; } = false;
 }

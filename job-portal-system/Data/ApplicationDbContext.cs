@@ -20,6 +20,7 @@ namespace job_portal_system.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
         // public DbSet<Skill> Skills { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

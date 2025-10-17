@@ -1,7 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using job_portal_system.Models.Domain
+@using job_portal_system.Data
+@using Microsoft.EntityFrameworkCore
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject ApplicationDbContext context
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,9 +18,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <link href="~/css/base.css" rel="stylesheet" />
+    <link href="~/css/themes.css" rel="stylesheet" />
     <link href="~/css/layout.css" rel="stylesheet" />
     <link href="~/css/components.css" rel="stylesheet" />
     <link href="~/css/admin.css" rel="stylesheet" />
+    <link href="~/css/home-landing.css" rel="stylesheet" />
+    <link href="~/css/modal.css" rel="stylesheet" />
+    <link href="~/css/breadcrumb.css" rel="stylesheet" />
+    <link href="~/css/toggle-buttons.css" rel="stylesheet" />
+
+    <!-- Load theme switcher IMMEDIATELY in head to prevent flash -->
+    <script src="~/js/theme-switcher.js"></script>
 
 </head>
 
@@ -75,57 +86,177 @@
 
                 <!-- Middle + Right -->
                 <div class="collapse navbar-collapse" id="mainNav">
-                    <!-- Middle: Links -->
+                    <!-- Middle: Links - Role-based tabs -->
                     <ul class="navbar-nav ms-3 me-auto d-flex align-items-center gap-1">
-                        <li class="nav-item">
-                            <a class="nav-link px-3 d-flex align-items-center gap-1" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house"></i> Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 d-flex align-items-center gap-1" asp-controller="Job" asp-action="Index">
-                                <i class="bi bi-briefcase"></i> Jobs
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 d-flex align-items-center gap-1" asp-controller="Companies" asp-action="Index">
-                                <i class="bi bi-buildings"></i> Companies
-                            </a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <!-- Admin Tabs -->
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" && ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "active" : "")" asp-controller="Admin" asp-action="Dashboard">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "ManageUsers" ? "active" : "")" asp-controller="Admin" asp-action="ManageUsers">
+                                    <i class="bi bi-people"></i> Users
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "PendingEmployers" ? "active" : "")" asp-controller="Admin" asp-action="PendingEmployers">
+                                    <i class="bi bi-building"></i> Employers
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "ManageJobs" ? "active" : "")" asp-controller="Admin" asp-action="ManageJobs">
+                                    <i class="bi bi-briefcase"></i> Jobs
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["controller"]?.ToString() == "AdminContact" ? "active" : "")" asp-controller="AdminContact" asp-action="Messages">
+                                    <i class="bi bi-envelope"></i> Contact
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "Reports" ? "active" : "")" asp-controller="Admin" asp-action="Reports">
+                                    <i class="bi bi-bar-chart"></i> Reports
+                                </a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Employer"))
+                        {
+                            <!-- Employer Tabs -->
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" && ViewContext.RouteData.Values["controller"]?.ToString() == "Employer" ? "active" : "")" asp-controller="Employer" asp-action="Dashboard">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "Applicants" ? "active" : "")" asp-controller="Employer" asp-action="Applicants">
+                                    <i class="bi bi-people"></i> Applicants
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "ManageJobs" ? "active" : "")" asp-controller="Job" asp-action="ManageJobs">
+                                    <i class="bi bi-briefcase"></i> My Jobs
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["action"]?.ToString() == "Create" && ViewContext.RouteData.Values["controller"]?.ToString() == "Job" ? "active" : "")" asp-controller="Job" asp-action="Create">
+                                    <i class="bi bi-plus-circle"></i> Post Job
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- JobSeeker/Guest Tabs -->
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Job" ? "active" : "")" asp-controller="Job" asp-action="Index">
+                                    <i class="bi bi-briefcase"></i> Jobs
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Companies" ? "active" : "")" asp-controller="Companies" asp-action="Index">
+                                    <i class="bi bi-buildings"></i> Companies
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 d-flex align-items-center gap-1 @(ViewContext.RouteData.Values["controller"]?.ToString() == "Contact" ? "active" : "")" asp-controller="Contact" asp-action="Index">
+                                    <i class="bi bi-envelope"></i> Contact
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <!-- Right: Actions -->
                     <div class="d-flex align-items-center gap-3">
-                        <!-- Search -->
-                        <form class="d-none d-lg-flex align-items-center" role="search" style="position:relative;">
-                            <i class="bi bi-search text-muted" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#64748b !important"></i>
-                                <input class="form-control bg-dark text-light border-0 ps-5"
-                                       type="search" placeholder="Search jobs..."
-                                       style="width:200px; height:36px; border-radius:6px; font-size:0.9rem;">
-                        </form>
+                        <!-- Language Toggle Button -->
+                        @* <button id="languageToggle" class="theme-toggle" onclick="toggleLanguage()" title="Toggle Language">
+                            <i class="bi bi-translate"></i>
+                            <span>Arabic</span>
+                        </button> *@
+
+                        <!-- Theme Toggle Button -->
+                        @* <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                            <i class="bi bi-sun-fill"></i>
+                            <span>Light</span>
+                        </button> *@
 
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <div class="dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-1 text-light"
-                                   href="#" id="userMenu" data-bs-toggle="dropdown" style="cursor:pointer;">
-                                    <i class="bi bi-person-circle fs-5"></i>
-                                    <span>@UserManager.GetUserName(User)</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    @if (User.IsInRole("JobSeeker"))
+                            var currentUser = await UserManager.GetUserAsync(User);
+                            
+                            if (currentUser != null)
+                            {
+                                string displayName = currentUser.UserName ?? "User";
+                                string? imagePath = null;
+                                
+                                // Try to get JobSeeker or Employer name and image
+                                if (User.IsInRole("JobSeeker"))
+                                {
+                                    var jobSeeker = await context.JobSeekers.FirstOrDefaultAsync(js => js.UserId == currentUser.Id);
+                                    if (jobSeeker != null)
                                     {
-                                        <li><a class="dropdown-item" asp-controller="JobSeeker" asp-action="Index" asp-route-id="@UserManager.GetUserId(User)"><i class="bi bi-person"></i> Profile</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Security" asp-route-id="@UserManager.GetUserId(User)"><i class="bi bi-shield-check"></i> Security</a></li>
+                                        displayName = $"{jobSeeker.FirstName} {jobSeeker.LastName}".Trim();
+                                        if (string.IsNullOrWhiteSpace(displayName))
+                                        {
+                                            displayName = currentUser.UserName ?? "User";
+                                        }
+                                        imagePath = jobSeeker.ImagePath;
+                                    }
+                                }
+                                else if (User.IsInRole("Employer"))
+                                {
+                                    var employer = await context.Employers.FirstOrDefaultAsync(e => e.UserId == currentUser.Id);
+                                    if (employer != null && !string.IsNullOrEmpty(employer.CompanyName))
+                                    {
+                                        displayName = employer.CompanyName;
+                                        imagePath = employer.LogoPath;
+                                    }
+                                }
 
-                                    }
-                                    else if (User.IsInRole("Employer"))
-                                    {
-                                        <li><a class="dropdown-item" asp-controller="Employer" asp-action="Index" asp-route-userId="@UserManager.GetUserId(User)"><i class="bi bi-person"></i> Profile</a></li>
-                                    }
-                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-                                </ul>
-                            </div>
+                                <div class="dropdown">
+                                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-light"
+                                       href="#" id="userMenu" data-bs-toggle="dropdown" style="cursor:pointer;">
+                                        @if (!string.IsNullOrEmpty(imagePath))
+                                        {
+                                            <img src="@imagePath" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #2ea043;" />
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-person-circle fs-5"></i>
+                                        }
+                                        <span>@displayName</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile"><i class="bi bi-person"></i> Profile</a></li>
+                                        @if (User.IsInRole("JobSeeker"))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Application" asp-action="MyApplications"><i class="bi bi-file-earmark-text"></i> My Applications</a></li>
+                                            <li><a class="dropdown-item" asp-controller="Messages" asp-action="Inbox"><i class="bi bi-envelope"></i> Messages</a></li>
+                                        }
+                                        @if (User.IsInRole("Employer"))
+                                        {
+                                            <li><a class="dropdown-item" asp-controller="Messages" asp-action="Inbox"><i class="bi bi-envelope"></i> Messages</a></li>
+                                        }
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Security"><i class="bi bi-shield-check"></i> Security</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <!-- Fallback if user is signed in but user object is null -->
+                                <a asp-controller="Account" asp-action="Logout"
+                                   class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            }
                         }
                         else
                         {
@@ -144,62 +275,77 @@
         </nav>
     </header>
 
-@if (User.IsInRole("Admin"))
-{
-        <div class="admin-toolbar d-flex justify-content-between align-items-center px-5 py-2">
-            <div class="d-flex align-items-center gap-3">
-                <a asp-controller="Admin" asp-action="Dashboard" class="admin-link">
-                    <i class="bi bi-speedometer2"></i> Dashboard
-                </a>
-                <a asp-controller="Admin" asp-action="ManageUsers" class="admin-link">
-                    <i class="bi bi-people"></i> Users
-                </a>
-                <a asp-controller="Admin" asp-action="PendingEmployers" class="admin-link">
-                    <i class="bi bi-building"></i> Employers
-                </a>
-                <a asp-controller="Admin" asp-action="ManageJobs" class="admin-link">
-                    <i class="bi bi-briefcase"></i> Jobs
-                </a>
-                <a asp-controller="Admin" asp-action="Reports" class="admin-link">
-                    <i class="bi bi-bar-chart"></i> Reports
-                </a>
-            </div> 
-        </div>
-}
-
-
-
-    <main class="container mt-3" style="padding-top: @(User.IsInRole("Admin") ? "120px" : "80px");">
+    <main class="@(ViewData["FullWidth"]?.ToString() == "true" ? "" : "fluid-container mt-3")">
+        @if (ViewData["HideBreadcrumb"]?.ToString() != "true")
+        {
+            <div class="container-fluid px-4 pt-3">
+                @await Component.InvokeAsync("Breadcrumb")
+            </div>
+        }
         @RenderBody()
     </main>
 
     <footer class="py-3 text-center mt-auto">
-        <span>� @DateTime.Now.Year Job Portal System � <span class="text-secondary">Designed with</span> <i class="bi bi-heart-fill text-danger"></i></span>
+        <span>© @DateTime.Now.Year Job Portal System  <span class="text-secondary">Designed with</span> <i class="bi bi-heart-fill text-danger"></i></span>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const icon = themeToggle.querySelector('i');
-        const savedTheme = localStorage.getItem('theme');
-
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-mode');
-            icon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+        // Language toggle function
+        function toggleLanguage() {
+            const languageToggle = document.getElementById('languageToggle');
+            const currentLang = localStorage.getItem('language') || 'en';
+            const newLang = currentLang === 'en' ? 'ar' : 'en';
+            
+            // Update button text and icon
+            const span = languageToggle.querySelector('span');
+            if (newLang === 'ar') {
+                span.textContent = 'English';
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.setAttribute('lang', 'ar');
+            } else {
+                span.textContent = 'عربي';
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.setAttribute('lang', 'en');
+            }
+            
+            // Save preference
+            localStorage.setItem('language', newLang);
         }
 
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            const isLight = document.body.classList.contains('light-mode');
-            icon.classList.toggle('bi-sun-fill', !isLight);
-            icon.classList.toggle('bi-moon-fill', isLight);
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        });
+        // Initialize language on page load
+        function initLanguage() {
+            const savedLang = localStorage.getItem('language') || 'en';
+            const languageToggle = document.getElementById('languageToggle');
+            
+            if (languageToggle) {
+                const span = languageToggle.querySelector('span');
+                if (savedLang === 'ar') {
+                    span.textContent = 'English';
+                    document.documentElement.setAttribute('dir', 'rtl');
+                    document.documentElement.setAttribute('lang', 'ar');
+                } else {
+                    span.textContent = 'عربي';
+                    document.documentElement.setAttribute('dir', 'ltr');
+                    document.documentElement.setAttribute('lang', 'en');
+                }
+            }
+        }
+
+        // Initialize language when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLanguage);
+        } else {
+            initLanguage();
+        }
     </script>
+    
     <script>
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
-</script>
+        // Initialize tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

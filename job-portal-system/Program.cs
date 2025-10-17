@@ -34,8 +34,8 @@ builder.Services.AddScoped<IEmployerRepository, EmployerRepository>();
 builder.Services.AddScoped<IEmployerService, EmployerService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddScoped<IJobSeekerRepository, JobSeekerRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -76,8 +76,8 @@ using (var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
     }
 
-    var adminEmail = "admin@system.com";
-    var adminPassword = "admin123";
+    var adminEmail = "admin@jobverse.com";
+    var adminPassword = "Admin123!"; 
 
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
@@ -98,11 +98,20 @@ using (var scope = app.Services.CreateScope())
     }
     else
     {
+        // Ensure admin username matches email (fix for changed usernames)
+        if (adminUser.UserName != adminEmail)
+        {
+            adminUser.UserName = adminEmail;
+            await userManager.UpdateAsync(adminUser);
+        }
+        
         if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
         }
     }
+
+
 }
 
 

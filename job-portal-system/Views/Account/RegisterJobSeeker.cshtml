@@ -3,62 +3,153 @@
     ViewData["Title"] = "Register as Job Seeker";
 }
 
-<link rel="stylesheet" href="~/css/pages/register.css" />
+<link rel="stylesheet" href="~/css/pages/auth.css" />
 
-<section class="register-section">
-    <div class="register-card">
-        <h2>Register as Job Seeker</h2>
-
-        <form asp-action="RegisterJobSeeker" method="post" class="floating-form">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-floating mb-3">
-                        <input asp-for="FirstName" class="form-control" placeholder="First Name" />
-                        <label asp-for="FirstName"></label>
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="auth-section">
+    <div class="auth-container">
+        <!-- Left Side - Branding -->
+        <div class="auth-branding">
+            <div class="branding-content">
+                <div class="logo-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+                        <defs>
+                            <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                                <stop offset="0" stop-color="#238636"/>
+                                <stop offset="1" stop-color="#2ea043"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="32" cy="32" r="20" fill="url(#g1)" opacity="0.12"/>
+                        <circle cx="32" cy="32" r="16" fill="url(#g1)"/>
+                        <g transform="translate(0,0)">
+                            <rect x="23.6" y="27.8" width="16.8" height="8.4" rx="1.2" ry="1.2" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+                            <path d="M27.2 26.4 h9.6 a1.2 1.2 0 0 1 1.2 1.2 v0.4" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+                            <rect x="30.6" y="30.6" width="2.8" height="3.2" rx="0.6" fill="#ffffff"/>
+                        </g>
+                    </svg>
+                </div>
+                <h1 class="branding-title">Start Your <span class="gradient-text">Career Journey</span></h1>
+                <p class="branding-subtitle">Join thousands of job seekers finding their dream jobs</p>
+                <div class="branding-features">
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Create your professional profile</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Apply to jobs instantly</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Track your applications</span>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-6">
-                    <div class="form-floating mb-3">
-                        <input asp-for="LastName" class="form-control" placeholder="Last Name" />
-                        <label asp-for="LastName"></label>
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
+        <!-- Right Side - Register Form -->
+        <div class="auth-form-wrapper">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2 class="auth-title">Create Account</h2>
+                    <p class="auth-subtitle">Register as a Job Seeker</p>
                 </div>
+
+                <form asp-action="RegisterJobSeeker" method="post" class="auth-form" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="form-row-auth">
+                        <div class="form-group-auth">
+                            <label asp-for="FirstName" class="form-label-auth">
+                                <i class="bi bi-person"></i> First Name
+                            </label>
+                            <input asp-for="FirstName" class="form-input-auth" placeholder="John" />
+                            <span asp-validation-for="FirstName" class="validation-message-auth"></span>
+                        </div>
+
+                        <div class="form-group-auth">
+                            <label asp-for="LastName" class="form-label-auth">
+                                <i class="bi bi-person"></i> Last Name
+                            </label>
+                            <input asp-for="LastName" class="form-input-auth" placeholder="Doe" />
+                            <span asp-validation-for="LastName" class="validation-message-auth"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="Email" class="form-label-auth">
+                            <i class="bi bi-envelope"></i> Email Address
+                        </label>
+                        <input asp-for="Email" type="email" class="form-input-auth" placeholder="john.doe@example.com" autocomplete="email" />
+                        <span asp-validation-for="Email" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="Password" class="form-label-auth">
+                            <i class="bi bi-lock"></i> Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input asp-for="Password" type="password" class="form-input-auth" id="passwordField" placeholder="Create a strong password" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" id="togglePassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="ConfirmPassword" class="form-label-auth">
+                            <i class="bi bi-lock-fill"></i> Confirm Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input asp-for="ConfirmPassword" type="password" class="form-input-auth" id="confirmPasswordField" placeholder="Re-enter your password" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="validation-message-auth"></span>
+                    </div>
+
+                    <button type="submit" class="btn-auth btn-auth-primary">
+                        <span>Create Account</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <div class="auth-footer">
+                        <p class="footer-text">
+                            Already have an account?
+                            <a asp-controller="Account" asp-action="Login" class="auth-link">Sign In</a>
+                        </p>
+                        <p class="footer-text">
+                            Want to hire?
+                            <a asp-controller="Account" asp-action="RegisterEmployer" class="auth-link">Register as Employer</a>
+                        </p>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-floating mb-3">
-                <input asp-for="Email" type="email" class="form-control" placeholder="Email" />
-                <label asp-for="Email"></label>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-floating mb-3">
-                <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
-                <label asp-for="Password"></label>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-
-            <div class="form-floating mb-4">
-                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" />
-                <label asp-for="ConfirmPassword"></label>
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 rounded-pill">Register</button>
-        </form>
-
-        <div class="text-center mt-3">
-            <small>
-                Already have an account?
-                <a asp-controller="Account" asp-action="Login">Login</a>
-            </small>
         </div>
     </div>
-</section>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Password toggle
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('passwordField');
+        togglePassword.addEventListener('click', function() {
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordField = document.getElementById('confirmPasswordField');
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPasswordField.type === 'password' ? 'text' : 'password';
+            confirmPasswordField.type = type;
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
+        });
+    </script>
 }

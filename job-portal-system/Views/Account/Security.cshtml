@@ -1,67 +1,143 @@
-@model job_portal_system.Models.ViewModels.SecurityViewModel
+@model job_portal_system.Models.DTOs.ChangePasswordDto
 
-<h2 class="mb-4">Account Security</h2>
-
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success">@TempData["Message"]</div>
+@{
+    ViewData["Title"] = "Change Password";
 }
 
-<form asp-action="Security" method="post" class="row g-4">
-    <!-- Email Section -->
-    <div class="col-12 col-md-6">
-        <div class="card shadow-sm p-4 h-100">
-            <h5 class="card-title mb-3">Email Address</h5>
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" placeholder="Enter your email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+<link rel="stylesheet" href="~/css/pages/auth.css" />
+
+<div class="auth-section">
+    <div class="auth-container-small">
+        <div class="auth-form-wrapper">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="forgot-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <h2 class="auth-title">Change Password</h2>
+                    <p class="auth-subtitle">Update your password to keep your account secure</p>
+                </div>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert-success-custom">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>@TempData["SuccessMessage"]</span>
+                    </div>
+                }
+
+                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+                {
+                    <div class="alert-danger-custom">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <div>
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <form asp-action="Security" method="post" class="auth-form">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group-auth">
+                        <label asp-for="CurrentPassword" class="form-label-auth">
+                            <i class="bi bi-key"></i> Current Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input asp-for="CurrentPassword" type="password" class="form-input-auth" id="currentPasswordField" placeholder="Enter your current password" autocomplete="current-password" />
+                            <button type="button" class="password-toggle" id="toggleCurrentPassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="CurrentPassword" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="NewPassword" class="form-label-auth">
+                            <i class="bi bi-shield-check"></i> New Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input asp-for="NewPassword" type="password" class="form-input-auth" id="newPasswordField" placeholder="Enter new password (min. 6 characters)" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" id="toggleNewPassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="NewPassword" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="ConfirmPassword" class="form-label-auth">
+                            <i class="bi bi-shield-check"></i> Confirm New Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input asp-for="ConfirmPassword" type="password" class="form-input-auth" id="confirmPasswordField" placeholder="Confirm new password" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="validation-message-auth"></span>
+                    </div>
+
+                    <button type="submit" class="btn-auth btn-auth-primary">
+                        <span>Update Password</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <div class="auth-footer">
+                        <a asp-action="Profile" class="back-to-login">
+                            <i class="bi bi-arrow-left"></i>
+                            <span>Back to Profile</span>
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
-    <!-- Phone Section -->
-    <div class="col-12 col-md-6">
-        <div class="card shadow-sm p-4 h-100">
-            <h5 class="card-title mb-3">Phone Number</h5>
-            <div class="mb-3">
-                <label asp-for="PhoneNumber" class="form-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your phone number" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Password Section -->
-    <div class="col-12">
-        <div class="card shadow-sm p-4">
-            <h5 class="card-title mb-3">Change Password</h5>
-            <div class="row g-3">
-                <div class="col-12 col-md-4">
-                    <label asp-for="CurrentPassword" class="form-label"></label>
-                    <input asp-for="CurrentPassword" class="form-control" placeholder="Current password" />
-                    <span asp-validation-for="CurrentPassword" class="text-danger"></span>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label asp-for="NewPassword" class="form-label"></label>
-                    <input asp-for="NewPassword" class="form-control" placeholder="New password" />
-                    <span asp-validation-for="NewPassword" class="text-danger"></span>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label asp-for="ConfirmNewPassword" class="form-label"></label>
-                    <input asp-for="ConfirmNewPassword" class="form-control" placeholder="Confirm new password" />
-                    <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="col-12 text-end">
-        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-    </div>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Password toggle functionality for current password
+        const toggleCurrentPassword = document.getElementById('toggleCurrentPassword');
+        const currentPasswordField = document.getElementById('currentPasswordField');
+
+        if (toggleCurrentPassword && currentPasswordField) {
+            toggleCurrentPassword.addEventListener('click', function () {
+                const type = currentPasswordField.type === 'password' ? 'text' : 'password';
+                currentPasswordField.type = type;
+                this.querySelector('i').classList.toggle('bi-eye');
+                this.querySelector('i').classList.toggle('bi-eye-slash');
+            });
+        }
+
+        // Password toggle functionality for new password
+        const toggleNewPassword = document.getElementById('toggleNewPassword');
+        const newPasswordField = document.getElementById('newPasswordField');
+
+        if (toggleNewPassword && newPasswordField) {
+            toggleNewPassword.addEventListener('click', function () {
+                const type = newPasswordField.type === 'password' ? 'text' : 'password';
+                newPasswordField.type = type;
+                this.querySelector('i').classList.toggle('bi-eye');
+                this.querySelector('i').classList.toggle('bi-eye-slash');
+            });
+        }
+
+        // Password toggle functionality for confirm password
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordField = document.getElementById('confirmPasswordField');
+
+        if (toggleConfirmPassword && confirmPasswordField) {
+            toggleConfirmPassword.addEventListener('click', function () {
+                const type = confirmPasswordField.type === 'password' ? 'text' : 'password';
+                confirmPasswordField.type = type;
+                this.querySelector('i').classList.toggle('bi-eye');
+                this.querySelector('i').classList.toggle('bi-eye-slash');
+            });
+        }
+    </script>
 }

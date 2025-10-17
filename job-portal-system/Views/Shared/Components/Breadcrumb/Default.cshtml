@@ -1,0 +1,35 @@
+@model List<job_portal_system.ViewComponents.BreadcrumbItem>
+
+@if (Model != null && Model.Any())
+{
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb">
+            @foreach (var item in Model)
+            {
+                @if (item.IsActive)
+                {
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <i class="@item.Icon"></i>
+                        <span>@item.Text</span>
+                    </li>
+                }
+                else if (!string.IsNullOrEmpty(item.Url))
+                {
+                    <li class="breadcrumb-item">
+                        <a href="@item.Url">
+                            <i class="@item.Icon"></i>
+                            <span>@item.Text</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item">
+                        <i class="@item.Icon"></i>
+                        <span>@item.Text</span>
+                    </li>
+                }
+            }
+        </ol>
+    </nav>
+}

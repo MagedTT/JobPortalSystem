@@ -1,0 +1,144 @@
+@model IEnumerable<job_portal_system.Models.ViewModels.CompanyViewModel>
+@{
+    ViewData["Title"] = "Companies";
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="jobs-page">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="jobs-header">
+            <h1>Explore <span style="background: linear-gradient(135deg, #238636 0%, #2ea043 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Top Companies</span></h1>
+            <p>Discover amazing companies and find your next career opportunity</p>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="job-search-bar">
+            <form asp-action="Index" method="get">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="search-input-group">
+                            <i class="bi bi-search"></i>
+                            <input type="text" name="search" class="form-control" placeholder="Search by company name or description..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="location" class="form-select filter-select">
+                            <option value="">All Locations</option>
+                            <option value="Cairo">Cairo</option>
+                            <option value="Alexandria">Alexandria</option>
+                            <option value="Giza">Giza</option>
+                            <option value="Remote">Remote</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-job-apply w-100" style="height: 50px;">
+                            <i class="bi bi-funnel"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Companies Grid -->
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+                <h3>No Companies Found</h3>
+                <p>There are no companies available at the moment. Check back later!</p>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var company in Model)
+                {
+                    <div class="col-lg-6">
+                        <div class="job-card">
+                            <div class="job-card-header" style="margin-bottom: 20px;">
+                                <div class="company-logo" style="width: 80px; height: 80px; font-size: 2rem;">
+                                    @company.CompanyName.Substring(0, Math.Min(2, company.CompanyName.Length)).ToUpper()
+                                </div>
+                                @if (company.ActiveJobsCount > 0)
+                                {
+                                    <span class="job-badge full-time">
+                                        @company.ActiveJobsCount Job@(company.ActiveJobsCount > 1 ? "s" : "")
+                                    </span>
+                                }
+                            </div>
+
+                            <div class="job-card-body">
+                                <h3 class="job-title">@company.CompanyName</h3>
+                                
+                                <div class="job-meta" style="margin-bottom: 15px;">
+                                    <div class="meta-item">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        <span>@company.Location</span>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(company.Industry))
+                                    {
+                                        <div class="meta-item">
+                                            <i class="bi bi-briefcase-fill"></i>
+                                            <span>@company.Industry</span>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(company.CompanySize))
+                                    {
+                                        <div class="meta-item">
+                                            <i class="bi bi-people-fill"></i>
+                                            <span>@company.CompanySize employees</span>
+                                        </div>
+                                    }
+                                </div>
+
+                                <p class="job-description">@company.Description</p>
+
+                                @if (!string.IsNullOrEmpty(company.Website))
+                                {
+                                    <div style="margin-top: 15px;">
+                                        <a href="@company.Website" target="_blank" class="meta-item" style="color: #2ea043; text-decoration: none;">
+                                            <i class="bi bi-globe"></i>
+                                            <span>Visit Website</span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="job-card-footer" style="padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div>
+                                    <span style="color: #2ea043; font-weight: 700; font-size: 1.1rem;">
+                                        @company.ActiveJobsCount
+                                    </span>
+                                    <span style="color: #8b949e; font-size: 0.9rem;">
+                                        Active Position@(company.ActiveJobsCount != 1 ? "s" : "")
+                                    </span>
+                                </div>
+
+                                <div class="job-actions">
+                                    <a asp-action="Details" asp-route-id="@company.Id" class="btn-job btn-job-view">
+                                        <i class="bi bi-eye"></i> View Company
+                                    </a>
+                                    @if (User.IsInRole("JobSeeker"))
+                                    {
+                                        <a asp-action="SendMessage" asp-route-id="@company.Id" class="btn-job btn-job-apply">
+                                            <i class="bi bi-envelope"></i> Contact
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Results Summary -->
+            <div class="text-center mt-5">
+                <p style="color: #8b949e;">Showing @Model.Count() companies</p>
+            </div>
+        }
+    </div>
+</div>

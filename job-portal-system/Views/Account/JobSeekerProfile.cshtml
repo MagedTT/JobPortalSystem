@@ -1,0 +1,197 @@
+@model job_portal_system.Models.ViewModels.JobSeekerProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<link rel="stylesheet" href="~/css/pages/auth.css" />
+
+<div class="auth-section">
+    <div class="auth-container">
+        <!-- Left Side - Profile Summary -->
+        <div class="auth-branding">
+            <div class="branding-content">
+                <div class="logo-wrapper">
+                    @if (!string.IsNullOrEmpty(Model.ImagePath))
+                    {
+                        <img src="@Model.ImagePath" alt="Profile" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <i class="bi bi-person-circle" style="font-size: 100px; color: #2ea043;"></i>
+                    }
+                </div>
+                <h1 class="branding-title">
+                    <span class="gradient-text">@Model.FirstName @Model.LastName</span>
+                </h1>
+                <p class="branding-subtitle">Job Seeker Profile</p>
+                
+                <div class="branding-features">
+                    <div class="feature-item">
+                        <i class="bi bi-briefcase-fill"></i>
+                        <span>@Model.ExperienceYears years of experience</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-mortarboard-fill"></i>
+                        <span>@Model.Education</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>@Model.Location</span>
+                    </div>
+                    @if (Model.IsApproved)
+                    {
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span class="text-success">Account Approved</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="feature-item">
+                            <i class="bi bi-clock-fill"></i>
+                            <span class="text-warning">Pending Approval</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Edit Form -->
+        <div class="auth-form-wrapper">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2 class="auth-title">Edit Profile</h2>
+                    <p class="auth-subtitle">Update your personal information</p>
+                </div>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert-success-custom">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>@TempData["SuccessMessage"]</span>
+                    </div>
+                }
+
+                <form asp-action="UpdateJobSeekerProfile" method="post" enctype="multipart/form-data" class="auth-form">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.HiddenFor(m => m.UserId)
+                    @Html.HiddenFor(m => m.ImagePath)
+                    @Html.HiddenFor(m => m.CVPath)
+                    @Html.HiddenFor(m => m.IsApproved)
+
+                    <div class="form-group-auth">
+                        <label asp-for="ImageFile" class="form-label-auth">
+                            <i class="bi bi-image"></i> Profile Image
+                        </label>
+                        <input asp-for="ImageFile" type="file" class="form-input-auth" accept="image/*" style="padding: 10px;" />
+                        <span asp-validation-for="ImageFile" class="validation-message-auth"></span>
+                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                        {
+                            <small class="text-muted" style="font-size: 0.85rem;">Current image will be replaced</small>
+                        }
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="CVFile" class="form-label-auth">
+                            <i class="bi bi-file-earmark-pdf"></i> CV/Resume (PDF, DOC, DOCX)
+                        </label>
+                        <input asp-for="CVFile" type="file" class="form-input-auth" accept=".pdf,.doc,.docx" style="padding: 10px;" />
+                        <span asp-validation-for="CVFile" class="validation-message-auth"></span>
+                        @if (!string.IsNullOrEmpty(Model.CVPath))
+                        {
+                            <small class="text-muted" style="font-size: 0.85rem;">
+                                Current CV: <a href="@Model.CVPath" target="_blank" class="text-success">Download</a>
+                            </small>
+                        }
+                    </div>
+
+                    <div class="form-row-auth">
+                        <div class="form-group-auth">
+                            <label asp-for="FirstName" class="form-label-auth">
+                                <i class="bi bi-person"></i> First Name
+                            </label>
+                            <input asp-for="FirstName" class="form-input-auth" placeholder="Enter first name" />
+                            <span asp-validation-for="FirstName" class="validation-message-auth"></span>
+                        </div>
+
+                        <div class="form-group-auth">
+                            <label asp-for="LastName" class="form-label-auth">
+                                <i class="bi bi-person"></i> Last Name
+                            </label>
+                            <input asp-for="LastName" class="form-input-auth" placeholder="Enter last name" />
+                            <span asp-validation-for="LastName" class="validation-message-auth"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="Email" class="form-label-auth">
+                            <i class="bi bi-envelope"></i> Email
+                        </label>
+                        <input asp-for="Email" class="form-input-auth" readonly style="background-color: rgba(13, 17, 23, 0.8); cursor: not-allowed;" />
+                        <small class="text-muted" style="font-size: 0.85rem;">Email cannot be changed</small>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="PhoneNumber" class="form-label-auth">
+                            <i class="bi bi-telephone"></i> Phone Number
+                        </label>
+                        <input asp-for="PhoneNumber" class="form-input-auth" placeholder="Enter phone number" />
+                        <span asp-validation-for="PhoneNumber" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-row-auth">
+                        <div class="form-group-auth">
+                            <label asp-for="Education" class="form-label-auth">
+                                <i class="bi bi-mortarboard"></i> Education
+                            </label>
+                            <input asp-for="Education" class="form-input-auth" placeholder="e.g., Bachelor's Degree" />
+                            <span asp-validation-for="Education" class="validation-message-auth"></span>
+                        </div>
+
+                        <div class="form-group-auth">
+                            <label asp-for="ExperienceYears" class="form-label-auth">
+                                <i class="bi bi-briefcase"></i> Experience (Years)
+                            </label>
+                            <input asp-for="ExperienceYears" type="number" class="form-input-auth" placeholder="0" />
+                            <span asp-validation-for="ExperienceYears" class="validation-message-auth"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="Location" class="form-label-auth">
+                            <i class="bi bi-geo-alt"></i> Location
+                        </label>
+                        <input asp-for="Location" class="form-input-auth" placeholder="City, Country" />
+                        <span asp-validation-for="Location" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="Skills" class="form-label-auth">
+                            <i class="bi bi-lightbulb"></i> Skills
+                        </label>
+                        <input asp-for="Skills" class="form-input-auth" placeholder="e.g., C#, .NET, SQL (comma separated)" />
+                        <span asp-validation-for="Skills" class="validation-message-auth"></span>
+                    </div>
+
+                    <button type="submit" class="btn-auth btn-auth-primary">
+                        <span>Update Profile</span>
+                        <i class="bi bi-check-circle"></i>
+                    </button>
+
+                    <div class="auth-footer">
+                        <a asp-action="Security" class="back-to-login">
+                            <i class="bi bi-shield-lock"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

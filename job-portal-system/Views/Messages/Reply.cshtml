@@ -1,0 +1,140 @@
+@model job_portal_system.Models.ViewModels.SendMessageViewModel
+
+@{
+    ViewData["Title"] = "Reply to Message";
+}
+
+<link rel="stylesheet" href="~/css/pages/messages.css" />
+
+<div class="messages-page">
+    <div class="container" style="padding-top: 100px; padding-bottom: 60px;">
+        <!-- Page Header -->
+        <div class="messages-header">
+            <h1>
+                <i class="bi bi-reply-fill" style="color: #2ea043;"></i>
+                Reply to <span class="gradient-text">Message</span>
+            </h1>
+            <p>Send your response to @Model.ReceiverName</p>
+        </div>
+
+        <!-- Reply Form Card -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="message-details-card reply-card">
+                    <!-- Original Message Reference -->
+                    @if (ViewBag.OriginalMessage != null)
+                    {
+                        <div class="original-message-ref">
+                            <div class="ref-header">
+                                <i class="bi bi-quote"></i>
+                                <span>Original Message</span>
+                            </div>
+                            <div class="ref-content">
+                                <strong>Subject:</strong> @ViewBag.OriginalSubject<br/>
+                                <strong>From:</strong> @Model.ReceiverName<br/>
+                                <strong>Date:</strong> @ViewBag.OriginalMessage.SentAt.ToString("MMM dd, yyyy at hh:mm tt")
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Reply Form -->
+                    <form asp-action="Reply" method="post" class="reply-form" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="SenderId" />
+                        <input type="hidden" asp-for="ReceiverId" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- To Field (Read-only) -->
+                        <div class="form-group-message">
+                            <label class="form-label-message">
+                                <i class="bi bi-person-fill"></i> To
+                            </label>
+                            <input asp-for="ReceiverName" type="text" class="form-input-message" readonly />
+                        </div>
+
+                        <!-- Subject Field -->
+                        <div class="form-group-message">
+                            <label asp-for="Subject" class="form-label-message">
+                                <i class="bi bi-tag-fill"></i> Subject
+                            </label>
+                            <input asp-for="Subject" class="form-input-message" placeholder="Re: Message subject" />
+                            <span asp-validation-for="Subject" class="validation-message-message"></span>
+                        </div>
+
+                        <!-- Message Content -->
+                        <div class="form-group-message">
+                            <label asp-for="Content" class="form-label-message">
+                                <i class="bi bi-pencil-fill"></i> Your Reply
+                            </label>
+                            <textarea asp-for="Content" class="form-input-message" rows="10" placeholder="Type your reply here..."></textarea>
+                            <span asp-validation-for="Content" class="validation-message-message"></span>
+                            <small class="char-count">
+                                <span id="charCount">0</span> / 2000 characters
+                            </small>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-actions-message">
+                            <a asp-action="Inbox" class="btn-message btn-message-secondary">
+                                <i class="bi bi-x-circle"></i>
+                                <span>Cancel</span>
+                            </a>
+                            <button type="submit" class="btn-message btn-message-primary">
+                                <span>Send Reply</span>
+                                <i class="bi bi-send-fill"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Character counter
+        const contentTextarea = document.getElementById('Content');
+        const charCount = document.getElementById('charCount');
+
+        if (contentTextarea && charCount) {
+            contentTextarea.addEventListener('input', function() {
+                const count = this.value.length;
+                charCount.textContent = count;
+                
+                if (count > 1800) {
+                    charCount.style.color = '#f85149';
+                } else if (count > 1500) {
+                    charCount.style.color = '#d29922';
+                } else {
+                    charCount.style.color = '#8b949e';
+                }
+            });
+
+            // Initialize counter
+            charCount.textContent = contentTextarea.value.length;
+        }
+
+        // Auto-resize textarea
+        const textarea = document.querySelector('textarea.form-input-message');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        }
+
+        // Form submission animation
+        const form = document.querySelector('.reply-form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
+            });
+        }
+    </script>
+}
+

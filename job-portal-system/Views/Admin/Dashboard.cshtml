@@ -1,16 +1,16 @@
-@using System.Text.Json
-@* @{
+@{
     ViewData["Title"] = "Admin Dashboard";
 }
 
 <div class="container mt-5">
-    <h2 class="fw-semibold mb-4 d-flex align-items-center gap-2">
-        <i class="bi bi-speedometer2 text-primary"></i> Admin Dashboard
+    <h2 class="fw-semibold mb-4 d-flex align-items-center gap-3" style="font-size:2.1rem;">
+        <i class="bi bi-speedometer2 text-primary" style="font-size:2.5rem;"></i>
+        <span>Admin Dashboard</span>
     </h2>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-light">
+            <div class="card border-0 shadow-lg rounded-4 p-4 text-center bg-dark text-light admin-stat-card">
                 <div class="text-primary mb-2">
                     <i class="bi bi-people-fill fs-2"></i>
                 </div>
@@ -18,9 +18,8 @@
                 <h3 class="fw-bold">@ViewBag.TotalUsers</h3>
             </div>
         </div>
-
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white">
+            <div class="card border-0 shadow-lg rounded-4 p-4 text-center bg-dark text-light admin-stat-card">
                 <div class="text-success mb-2">
                     <i class="bi bi-building fs-2"></i>
                 </div>
@@ -28,9 +27,8 @@
                 <h3 class="fw-bold">@ViewBag.TotalEmployers</h3>
             </div>
         </div>
-
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white">
+            <div class="card border-0 shadow-lg rounded-4 p-4 text-center bg-dark text-light admin-stat-card">
                 <div class="text-info mb-2">
                     <i class="bi bi-briefcase-fill fs-2"></i>
                 </div>
@@ -38,10 +36,8 @@
                 <h3 class="fw-bold">@ViewBag.TotalJobs</h3>
             </div>
         </div>
-
         <div class="col-md-3">
-            <div
-                class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white border-start border-4 border-warning">
+            <div class="card border-0 shadow-lg rounded-4 p-4 text-center bg-dark text-light admin-stat-card border-start border-4 border-warning">
                 <div class="text-warning mb-2">
                     <i class="bi bi-hourglass-split fs-2"></i>
                 </div>
@@ -52,139 +48,147 @@
         </div>
     </div>
 
-</div> *@
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Charts</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="/AdminDashboard/endor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="/AdminDashboard/css/sb-admin-2.min.css" rel="stylesheet">
-
-</head>
-
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div class="container-fluid">
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Charts</h1>
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <div class="col-xl-8 col-lg-7">
-
-                            <!-- Area Chart -->
-                            @* <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">All Job Categories</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="jobCategories"
-                                            data-categories="@Html.Raw(JsonSerializer.Serialize(ViewBag.AllCategories))"></canvas>
-                                    </div>
-                                </div>
-                            </div> *@
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Jobs by Category</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-bar">
-                                        <canvas id="jobCategoryChart"
-                                            data-categories='@Html.Raw(JsonSerializer.Serialize(ViewBag.AllCategories))'
-                                            data-counts='@Html.Raw(JsonSerializer.Serialize(ViewBag.CategoryCounts))'></canvas>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Bar Chart -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Salary Distribution</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="salaryChart"
-                                            data-salaries="@Html.Raw(JsonSerializer.Serialize(ViewBag.AllSalaries))"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Donut Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Employers vs. JobSeekers</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4">
-                                        <canvas id="myPieChart" data-total-employers="@ViewBag.TotalEmployers"
-                                            data-total-job-seekers="@ViewBag.TotalJobSeekers"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-lg rounded-4 p-4 text-center bg-dark text-light admin-stat-card border-start border-4 border-info">
+                <div class="text-info mb-2">
+                    <i class="bi bi-person-check fs-2"></i>
                 </div>
-                <!-- /.container-fluid -->
+                <h6 class="text-secondary">Pending Job Seekers</h6>
+                <h3 class="fw-bold text-info">@ViewBag.PendingJobSeekers</h3>
+                <a asp-action="PendingEmployers" class="btn btn-outline-info btn-sm mt-2 px-4">Review</a>
             </div>
-            <!-- End of Main Content -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="/AdminDashboard/vendor/jquery/jquery.min.js"></script>
-    <script src="/AdminDashboard/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="/AdminDashboard/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <div class="row mt-5 gx-4 gy-4 align-items-stretch">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card h-100 p-4 bg-dark text-light shadow-lg rounded-4">
+                <h5 class="fw-semibold mb-3"><i class="bi bi-bar-chart text-primary"></i> Statistics</h5>
+                <canvas id="adminStatsChart" height="180"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card h-100 p-4 bg-dark text-light shadow-lg rounded-4">
+                <h5 class="fw-semibold mb-3"><i class="bi bi-pie-chart text-warning"></i> Distribution Overview</h5>
+                <canvas id="adminDistributionChart" height="180"></canvas>
+            </div>
+        </div>
+    </div>
 
-    <!-- Custom scripts for all pages-->
-    <script src="/AdminDashboard/js/sb-admin-2.min.js"></script>
+    <div class="row mt-5">
+        <div class="col-md-10 mx-auto">
+            <div class="quick-links-admin p-4 rounded-4 shadow-lg bg-dark text-light">
+                <h4 class="mb-4 fw-semibold"><i class="bi bi-lightning-charge text-warning"></i> Quick Links</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="mb-2">Last Job Seekers</h6>
+                        <ul class="list-unstyled">
+                            @foreach (var js in ViewBag.LastJobSeekers ?? new List<dynamic>())
+                            {
+                                <li><a href="/Admin/JobSeekerDetails/@js.Id" class="quick-link-admin">@js.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="mb-2">Last Employers</h6>
+                        <ul class="list-unstyled">
+                            @foreach (var emp in ViewBag.LastEmployers ?? new List<dynamic>())
+                            {
+                                <li><a href="/Admin/EmployerDetails/@emp.Id" class="quick-link-admin">@emp.CompanyName</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="mb-2">Last Jobs</h6>
+                        <ul class="list-unstyled">
+                            @foreach (var job in ViewBag.LastJobs ?? new List<dynamic>())
+                            {
+                                <li><a href="/Admin/JobDetails/@job.Id" class="quick-link-admin">@job.Title</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Page level plugins -->
-    <script src="/AdminDashboard/vendor/chart.js/Chart.min.js"></script>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('adminStatsChart').getContext('2d');
+        const adminStatsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Users', 'Employers', 'Jobs', 'Pending Employers', 'Pending Job Seekers'],
+                datasets: [{
+                    label: 'Statistics',
+                    data: [@ViewBag.TotalUsers, @ViewBag.TotalEmployers, @ViewBag.TotalJobs, @ViewBag.PendingEmployers, @ViewBag.PendingJobSeekers],
+                    backgroundColor: [
+                        'rgba(46, 160, 67, 0.7)',
+                        'rgba(56, 139, 253, 0.7)',
+                        'rgba(56, 139, 253, 0.5)',
+                        'rgba(210, 153, 34, 0.7)',
+                        'rgba(23, 162, 184, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(46, 160, 67, 1)',
+                        'rgba(56, 139, 253, 1)',
+                        'rgba(56, 139, 253, 1)',
+                        'rgba(210, 153, 34, 1)',
+                        'rgba(23, 162, 184, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Admin Portal Statistics'
+                    }
+                }
+            }
+        });
 
-    <!-- Page level custom scripts -->
-    <script src="/AdminDashboard/js/demo/chart-area-demo.js"></script>
-    <script src="/AdminDashboard/js/demo/chart-pie-demo.js"></script>
-    <script src="/AdminDashboard/js/demo/chart-bar-demo.js"></script>
-
-</body>
-
-</html>
+        // Second chart: distribution (example: doughnut)
+        const ctx2 = document.getElementById('adminDistributionChart').getContext('2d');
+        const adminDistributionChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Users', 'Employers', 'Job Seekers', 'Jobs'],
+                datasets: [{
+                    label: 'Distribution',
+                    data: [@ViewBag.TotalUsers, @ViewBag.TotalEmployers, (@ViewBag.TotalUsers - @ViewBag.TotalEmployers), @ViewBag.TotalJobs],
+                    backgroundColor: [
+                        'rgba(46, 160, 67, 0.7)',
+                        'rgba(56, 139, 253, 0.7)',
+                        'rgba(210, 153, 34, 0.7)',
+                        'rgba(56, 139, 253, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(46, 160, 67, 1)',
+                        'rgba(56, 139, 253, 1)',
+                        'rgba(210, 153, 34, 1)',
+                        'rgba(56, 139, 253, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: {
+                        display: true,
+                        text: 'Distribution Overview'
+                    }
+                }
+            }
+        });
+    </script>
+}

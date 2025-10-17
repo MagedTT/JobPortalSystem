@@ -1,0 +1,175 @@
+/* ========================================
+   Toggle Buttons - Enhanced Design System
+   ======================================== */
+
+/* Base toggle button styling - matching design system */
+.theme-toggle {
+    background: rgba(22, 27, 34, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #c9d1d9 !important;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    min-width: 70px;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    background: rgba(46, 160, 67, 0.15) !important;
+    color: #2ea043 !important;
+    border-color: rgba(46, 160, 67, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(46, 160, 67, 0.25);
+    transform: translateY(-1px);
+}
+
+.theme-toggle:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(46, 160, 67, 0.3);
+}
+
+.theme-toggle i {
+    font-size: 1rem;
+    color: inherit !important;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle span {
+    color: inherit !important;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+/* Language Toggle specific styling */
+#languageToggle {
+    background: rgba(22, 27, 34, 0.85) !important;
+    border: 1px solid rgba(88, 166, 255, 0.2) !important;
+}
+
+#languageToggle:hover {
+    background: rgba(88, 166, 255, 0.12) !important;
+    border-color: rgba(88, 166, 255, 0.4) !important;
+    color: #58a6ff !important;
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.25);
+}
+
+#languageToggle i {
+    color: #58a6ff !important;
+}
+
+/* Theme Toggle specific styling */
+#themeToggle {
+    background: rgba(22, 27, 34, 0.85) !important;
+    border: 1px solid rgba(46, 160, 67, 0.2) !important;
+}
+
+#themeToggle:hover {
+    background: rgba(46, 160, 67, 0.12) !important;
+    border-color: rgba(46, 160, 67, 0.4) !important;
+    color: #2ea043 !important;
+    box-shadow: 0 4px 12px rgba(46, 160, 67, 0.25);
+}
+
+#themeToggle i {
+    color: #2ea043 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .theme-toggle {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
+        gap: 0.3rem;
+        min-width: 45px;
+    }
+    
+    .theme-toggle i {
+        font-size: 0.9rem;
+    }
+    
+    .theme-toggle span {
+        display: none; /* Hide text on mobile, show only icons */
+    }
+}
+
+/* Integration with navbar */
+.navbar .theme-toggle {
+    margin: 0 0.2rem;
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .theme-toggle {
+    background: rgba(246, 248, 250, 0.9) !important;
+    border: 1px solid rgba(209, 217, 224, 0.6) !important;
+    color: #424a53 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+    background: rgba(234, 238, 242, 0.9) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] #languageToggle {
+    border: 1px solid rgba(9, 105, 218, 0.2) !important;
+}
+
+[data-theme="light"] #languageToggle:hover {
+    background: rgba(9, 105, 218, 0.08) !important;
+    border-color: rgba(9, 105, 218, 0.3) !important;
+    color: #0969da !important;
+    box-shadow: 0 4px 12px rgba(9, 105, 218, 0.15);
+}
+
+[data-theme="light"] #languageToggle i {
+    color: #0969da !important;
+}
+
+[data-theme="light"] #themeToggle {
+    border: 1px solid rgba(31, 136, 61, 0.2) !important;
+}
+
+[data-theme="light"] #themeToggle:hover {
+    background: rgba(31, 136, 61, 0.08) !important;
+    border-color: rgba(31, 136, 61, 0.3) !important;
+    color: #1f883d !important;
+    box-shadow: 0 4px 12px rgba(31, 136, 61, 0.15);
+}
+
+[data-theme="light"] #themeToggle i {
+    color: #1f883d !important;
+}
+
+/* Focus states for accessibility */
+.theme-toggle:focus {
+    outline: 2px solid rgba(46, 160, 67, 0.5);
+    outline-offset: 2px;
+}
+
+#languageToggle:focus {
+    outline: 2px solid rgba(88, 166, 255, 0.5);
+}
+
+/* Animation for icon changes */
+.theme-toggle i {
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes iconChange {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(0.8); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+.theme-toggle.changing i {
+    animation: iconChange 0.3s ease-in-out;
+}

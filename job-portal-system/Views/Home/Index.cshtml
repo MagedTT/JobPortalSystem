@@ -1,45 +1,213 @@
 @using Microsoft.AspNetCore.Identity
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Find Your Dream Job";
+    ViewData["FullWidth"] = "true";
+    ViewData["HideBreadcrumb"] = "true";
 }
 
-<div class="container mt-5 text-center">
-    <h2>Welcome to Job Portal System</h2>
-    <hr class="my-4" />
-
-    @if (User?.Identity != null && User.Identity.IsAuthenticated)
-    {
-        if (User.IsInRole("employer"))
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-content">
+        <div class="hero-badge fade-in-up">
+            <i class="bi bi-stars"></i>
+            <span>Welcome to the Future of Job Hunting</span>
+        </div>
+        <h1 class="hero-title fade-in-up delay-1">
+            Discover Your <span class="gradient-text">Dream Career</span>
+        </h1>
+        <p class="hero-subtitle fade-in-up delay-2">
+            Connect with top employers and unlock opportunities that match your skills and ambitions
+        </p>
+        
+        @if (User?.Identity != null && User.Identity.IsAuthenticated)
         {
-            <div class="alert alert-primary mt-3 p-3 rounded-4">
-                <h5 class="mb-2">Welcome Employer!</h5>
-                <p>You can post and manage your job listings.</p>
-                <a asp-controller="Job" asp-action="Create" class="btn btn-primary rounded-pill px-4 mt-2">Post a Job</a>
+            @if (User.IsInRole("Employer"))
+            {
+                <div class="hero-actions fade-in-up delay-3">
+                    <a asp-controller="Job" asp-action="Create" class="btn-hero btn-hero-primary">
+                        <i class="bi bi-plus-circle"></i> Post a Job
+                    </a>
+                    <a asp-controller="Job" asp-action="Index" class="btn-hero btn-hero-secondary">
+                        <i class="bi bi-briefcase"></i> View All Jobs
+                    </a>
+                </div>
+            }
+            else if (User.IsInRole("JobSeeker"))
+            {
+                <div class="hero-actions fade-in-up delay-3">
+                    <a asp-controller="Job" asp-action="Index" class="btn-hero btn-hero-primary">
+                        <i class="bi bi-search"></i> Browse Jobs
+                    </a>
+                    <a asp-controller="Account" asp-action="Profile" class="btn-hero btn-hero-secondary">
+                        <i class="bi bi-person"></i> My Profile
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="hero-actions fade-in-up delay-3">
+                <a asp-controller="Account" asp-action="Register" class="btn-hero btn-hero-primary">
+                    <i class="bi bi-rocket-takeoff"></i> Get Started
+                </a>
+                <a asp-controller="Job" asp-action="Index" class="btn-hero btn-hero-secondary">
+                    <i class="bi bi-search"></i> Explore Jobs
+                </a>
             </div>
         }
-        else if (User.IsInRole("jobseeker"))
+
+        <div class="hero-stats fade-in-up delay-4">
+            <div class="stat-item">
+                <h3 class="stat-number" data-target="5000">0</h3>
+                <p class="stat-label">Active Jobs</p>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <h3 class="stat-number" data-target="2500">0</h3>
+                <p class="stat-label">Companies</p>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <h3 class="stat-number" data-target="10000">0</h3>
+                <p class="stat-label">Job Seekers</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hero-scroll-indicator">
+        <div class="scroll-mouse"></div>
+        <span>Scroll to explore</span>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">Why Choose <span class="gradient-text">Jobverse</span>?</h2>
+            <p class="section-subtitle">Everything you need to succeed in your career journey</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                    <h3 class="feature-title">Instant Match</h3>
+                    <p class="feature-text">AI-powered job recommendations tailored to your skills</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="feature-title">Verified Companies</h3>
+                    <p class="feature-text">Work with trusted employers verified by our team</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <h3 class="feature-title">Career Growth</h3>
+                    <p class="feature-text">Track your progress and unlock new opportunities</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3 class="feature-title">Community</h3>
+                    <p class="feature-text">Connect with professionals in your industry</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+            <p class="section-subtitle">Get hired in three simple steps</p>
+        </div>
+        
+        <div class="steps-container">
+            <div class="step-item" data-aos="fade-right" data-aos-delay="100">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h3 class="step-title">Create Your Profile</h3>
+                    <p class="step-text">Sign up and build your professional profile in minutes</p>
+                </div>
+                <div class="step-icon">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+            </div>
+            
+            <div class="step-connector" data-aos="fade-in" data-aos-delay="200"></div>
+            
+            <div class="step-item" data-aos="fade-right" data-aos-delay="300">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h3 class="step-title">Find Perfect Jobs</h3>
+                    <p class="step-text">Browse thousands of opportunities matching your skills</p>
+                </div>
+                <div class="step-icon">
+                    <i class="bi bi-search-heart"></i>
+                </div>
+            </div>
+            
+            <div class="step-connector" data-aos="fade-in" data-aos-delay="400"></div>
+            
+            <div class="step-item" data-aos="fade-right" data-aos-delay="500">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h3 class="step-title">Get Hired</h3>
+                    <p class="step-text">Apply with one click and start your dream career</p>
+                </div>
+                <div class="step-icon">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-content">
+        <h2 class="cta-title" data-aos="zoom-in">Ready to Start Your Journey?</h2>
+        <p class="cta-subtitle" data-aos="zoom-in" data-aos-delay="100">
+            Join thousands of professionals who found their dream jobs
+        </p>
+        @if (User?.Identity == null || !User.Identity.IsAuthenticated)
         {
-            <div class="alert alert-success mt-3 p-3 rounded-4">
-                <h5 class="mb-2">Welcome Job Seeker!</h5>
-                <p>You can browse and apply for available jobs.</p>
-                <a asp-controller="Job" asp-action="Index" class="btn btn-success rounded-pill px-4 mt-2">Find Jobs</a>
+            <div class="cta-buttons" data-aos="zoom-in" data-aos-delay="200">
+                <a asp-controller="Account" asp-action="Register" class="btn-cta btn-cta-primary">
+                    <i class="bi bi-rocket-takeoff"></i> Join Now - It's Free
+                </a>
             </div>
         }
         else
         {
-            <div class="alert alert-secondary mt-3 p-3 rounded-4">
-                <p>Welcome, @User.Identity.Name!</p>
+            <div class="cta-buttons" data-aos="zoom-in" data-aos-delay="200">
+                <a asp-controller="Job" asp-action="Index" class="btn-cta btn-cta-primary">
+                    <i class="bi bi-briefcase"></i> Explore Opportunities
+                </a>
             </div>
         }
-    }
-    else
-    {
-        <div class="alert alert-warning mt-4 p-3 rounded-4">
-            <h5 class="mb-2">Welcome to our portal!</h5>
-            <p>
-                Please <a asp-controller="Account" asp-action="Login">login</a> or
-                <a asp-controller="Account" asp-action="Register">create an account</a> to continue.
-            </p>
-        </div>
-    }
-</div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/home-landing.js"></script>
+}

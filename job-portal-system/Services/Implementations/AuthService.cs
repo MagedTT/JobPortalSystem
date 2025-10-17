@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using job_portal_system.Models.Domain;
 using job_portal_system.Models.DTOs;
 using job_portal_system.Services.Interfaces;
@@ -87,11 +87,10 @@ namespace job_portal_system.Services.Implementations
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
-                return (false, "No");
+                return (false, "Invalid email or password.");
 
-
-
-            var result = await _signInManager.PasswordSignInAsync(email, password, isPersistent: false, lockoutOnFailure: false);
+            // Use UserName for sign-in, not email
+            var result = await _signInManager.PasswordSignInAsync(user.UserName ?? email, password, isPersistent: false, lockoutOnFailure: false);
 
             if (result.Succeeded)
                 return (true, string.Empty);
@@ -155,45 +154,20 @@ namespace job_portal_system.Services.Implementations
             return (true, "");
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateSecurityAsync(User user, SecurityDto dto)
+        public async Task<(bool IsSuccess, string ErrorMessage)> ChangePasswordAsync(ClaimsPrincipal userClaims, string currentPassword, string newPassword)
         {
-            // ==================== Update Email ====================
-            if (!string.IsNullOrEmpty(dto.Email) && user.Email != dto.Email)
-            {
-                var setEmailResult = await _userManager.SetEmailAsync(user, dto.Email);
-                if (!setEmailResult.Succeeded)
-                    return (false, setEmailResult.Errors.First().Description);
+            var user = await _userManager.GetUserAsync(userClaims);
+            if (user == null)
+                return (false, "User not found.");
 
-                var setUserNameResult = await _userManager.SetUserNameAsync(user, dto.Email);
-                if (!setUserNameResult.Succeeded)
-                    return (false, setUserNameResult.Errors.First().Description);
-            }
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            if (!result.Succeeded)
+                return (false, string.Join("; ", result.Errors.Select(e => e.Description)));
 
-            // ==================== Update Phone Number ====================
-            if (!string.IsNullOrEmpty(dto.PhoneNumber) && user.PhoneNumber != dto.PhoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, dto.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                    return (false, setPhoneResult.Errors.First().Description);
-            }
+            // Sign in the user again to refresh the security stamp
+            await _signInManager.RefreshSignInAsync(user);
 
-            // ==================== Update Password ====================
-            if (!string.IsNullOrEmpty(dto.NewPassword))
-            {
-                if (string.IsNullOrEmpty(dto.CurrentPassword))
-                    return (false, "Current password is required to change your password.");
-
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
-                if (!changePasswordResult.Succeeded)
-                    return (false, changePasswordResult.Errors.First().Description);
-            }
-
-            return (true, string.Empty);
-        }
-
-        public async Task<User?> GetUserAsync(ClaimsPrincipal principal)
-        {
-            return await _userManager.GetUserAsync(principal);
+            return (true, "");
         }
 
     }

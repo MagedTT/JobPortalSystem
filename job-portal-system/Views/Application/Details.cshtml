@@ -1,0 +1,213 @@
+@model job_portal_system.Models.ViewModels.ApplicationViewModel
+@{
+    ViewData["Title"] = "Application Details";
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="job-details-page">
+    <div class="container">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a asp-action="MyApplications" class="btn-job btn-job-view">
+                <i class="bi bi-arrow-left"></i> Back to My Applications
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Application Header -->
+                <div class="job-details-card">
+                    <div class="text-center mb-4">
+                        <div class="company-logo mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                            @Model.CompanyName.Substring(0, Math.Min(2, Model.CompanyName.Length)).ToUpper()
+                        </div>
+                        <h1 class="job-details-title">@Model.JobTitle</h1>
+                        <div class="job-details-company" style="justify-content: center;">
+                            <i class="bi bi-building"></i>
+                            <span>@Model.CompanyName</span>
+                        </div>
+                    </div>
+
+                    <!-- Status Badge -->
+                    <div class="text-center mb-4">
+                        @if (Model.Status == "Pending")
+                        {
+                            <span class="job-badge" style="background: rgba(56, 139, 253, 0.15); color: #388bfd; border: 1px solid rgba(56, 139, 253, 0.3); font-size: 1rem; padding: 10px 20px;">
+                                <i class="bi bi-clock-history"></i> Application Pending Review
+                            </span>
+                        }
+                        else if (Model.Status == "Accepted")
+                        {
+                            <span class="job-badge" style="background: rgba(46, 160, 67, 0.15); color: #2ea043; border: 1px solid rgba(46, 160, 67, 0.3); font-size: 1rem; padding: 10px 20px;">
+                                <i class="bi bi-check-circle-fill"></i> Application Accepted
+                            </span>
+                        }
+                        else if (Model.Status == "Rejected")
+                        {
+                            <span class="job-badge" style="background: rgba(248, 81, 73, 0.15); color: #f85149; border: 1px solid rgba(248, 81, 73, 0.3); font-size: 1rem; padding: 10px 20px;">
+                                <i class="bi bi-x-circle-fill"></i> Application Rejected
+                            </span>
+                        }
+                    </div>
+
+                    <!-- Job Details -->
+                    <div class="job-details-meta" style="justify-content: center; padding-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 30px;">
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <strong>@Model.JobLocation</strong>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-cash-stack"></i>
+                            <strong>@Model.Salary.ToString("C0")</strong>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-briefcase-fill"></i>
+                            <strong>@(Model.JobType == "0" || Model.JobType.ToLower() == "fulltime" ? "Full Time" : "Part Time")</strong>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-tag-fill"></i>
+                            <strong>@Model.CategoryName</strong>
+                        </div>
+                    </div>
+
+                    <!-- Cover Letter -->
+                    @if (!string.IsNullOrEmpty(Model.CoverLetter))
+                    {
+                        <div class="details-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-file-text"></i>
+                                Your Cover Letter
+                            </h2>
+                            <div class="section-content" style="white-space: pre-line; background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                @Model.CoverLetter
+                            </div>
+                        </div>
+                    }
+
+                    <!-- CV -->
+                    @if (!string.IsNullOrEmpty(Model.CVPath))
+                    {
+                        <div class="details-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-file-earmark-pdf"></i>
+                                Your CV/Resume
+                            </h2>
+                            <div class="section-content">
+                                <a href="@Model.CVPath" target="_blank" class="btn-job btn-job-apply" style="display: inline-flex;">
+                                    <i class="bi bi-download"></i> Download CV
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Job Description -->
+                    @if (!string.IsNullOrEmpty(Model.JobDescription))
+                    {
+                        <div class="details-section">
+                            <h2 class="section-title">
+                                <i class="bi bi-info-circle"></i>
+                                Job Description
+                            </h2>
+                            <div class="section-content" style="white-space: pre-line;">
+                                @Model.JobDescription
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Application Timeline -->
+                <div class="job-details-card">
+                    <h3 class="section-title" style="font-size: 1.3rem; margin-bottom: 20px;">
+                        <i class="bi bi-clock-history"></i>
+                        Application Timeline
+                    </h3>
+
+                    <div class="timeline">
+                        <div class="timeline-item" style="padding: 15px; background: rgba(46, 160, 67, 0.1); border-left: 3px solid #2ea043; border-radius: 8px; margin-bottom: 15px;">
+                            <div style="color: #2ea043; font-weight: 600; margin-bottom: 5px;">
+                                <i class="bi bi-send-fill"></i> Application Submitted
+                            </div>
+                            <div style="color: #8b949e; font-size: 0.9rem;">
+                                @Model.ApplicationDate.ToString("MMMM dd, yyyy 'at' hh:mm tt")
+                            </div>
+                        </div>
+
+                        @if (Model.UpdatedAt != Model.ApplicationDate)
+                        {
+                            <div class="timeline-item" style="padding: 15px; background: rgba(56, 139, 253, 0.1); border-left: 3px solid #388bfd; border-radius: 8px; margin-bottom: 15px;">
+                                <div style="color: #388bfd; font-weight: 600; margin-bottom: 5px;">
+                                    <i class="bi bi-arrow-repeat"></i> Status Updated
+                                </div>
+                                <div style="color: #8b949e; font-size: 0.9rem;">
+                                    @Model.UpdatedAt.ToString("MMMM dd, yyyy 'at' hh:mm tt")
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="job-details-card mt-4">
+                    <h3 class="section-title" style="font-size: 1.3rem; margin-bottom: 20px;">
+                        <i class="bi bi-list-check"></i>
+                        Actions
+                    </h3>
+
+                    <div class="d-flex flex-column gap-3">
+                        <a asp-controller="Job" asp-action="Details" asp-route-id="@Model.JobId" class="btn-job btn-job-apply w-100" style="justify-content: center;">
+                            <i class="bi bi-briefcase"></i> View Full Job Details
+                        </a>
+
+                        @if (Model.Status == "Pending")
+                        {
+                            <form asp-action="Withdraw" asp-route-id="@Model.ApplicationId" method="post" class="w-100" onsubmit="return confirm('Are you sure you want to withdraw your application for &quot;@Model.JobTitle&quot; at @Model.CompanyName?\n\nThis action cannot be undone. You will need to reapply if you change your mind.');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-job w-100" style="background: rgba(248, 81, 73, 0.15); color: #f85149; border: 2px solid rgba(248, 81, 73, 0.3); justify-content: center;">
+                                    <i class="bi bi-trash"></i> Withdraw Application
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+
+                <!-- Status Info -->
+                <div class="job-details-card mt-4">
+                    <h3 class="section-title" style="font-size: 1.3rem; margin-bottom: 20px;">
+                        <i class="bi bi-info-circle"></i>
+                        Status Information
+                    </h3>
+
+                    @if (Model.Status == "Pending")
+                    {
+                        <div class="alert" style="background: rgba(56, 139, 253, 0.1); border: 1px solid rgba(56, 139, 253, 0.3); color: #388bfd; border-radius: 10px; padding: 15px;">
+                            <strong>Pending Review</strong>
+                            <p style="margin: 10px 0 0 0; font-size: 0.9rem;">Your application is currently under review. The employer will contact you if you're selected for the next step.</p>
+                        </div>
+                    }
+                    else if (Model.Status == "Accepted")
+                    {
+                        <div class="alert" style="background: rgba(46, 160, 67, 0.1); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px; padding: 15px;">
+                            <strong>Congratulations!</strong>
+                            <p style="margin: 10px 0 0 0; font-size: 0.9rem;">Your application has been accepted. The employer will contact you soon with further details.</p>
+                        </div>
+                    }
+                    else if (Model.Status == "Rejected")
+                    {
+                        <div class="alert" style="background: rgba(248, 81, 73, 0.1); border: 1px solid rgba(248, 81, 73, 0.3); color: #f85149; border-radius: 10px; padding: 15px;">
+                            <strong>Application Not Selected</strong>
+                            <p style="margin: 10px 0 0 0; font-size: 0.9rem;">Unfortunately, your application was not selected for this position. Keep applying and good luck with your job search!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,367 @@
+@{
+    ViewData["Title"] = "Employer Dashboard";
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+<link href="~/css/pages/dashboard-charts.css" rel="stylesheet" />
+
+<div class="jobs-page">
+    <div class="container" style="padding-top: 80px;">
+        <!-- Page Header -->
+        <div class="jobs-header">
+            <h1>
+                <i class="bi bi-speedometer2" style="color: #2ea043;"></i>
+                Employer <span style="background: linear-gradient(135deg, #238636 0%, #2ea043 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Dashboard</span>
+            </h1>
+            <p>Welcome back, @ViewBag.EmployerName</p>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success" style="background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px; margin-bottom: 30px;">
+                <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" style="background: rgba(248, 81, 73, 0.15); border: 1px solid rgba(248, 81, 73, 0.3); color: #f85149; border-radius: 10px; margin-bottom: 30px;">
+                <i class="bi bi-exclamation-circle-fill"></i> @TempData["Error"]
+            </div>
+        }
+
+        <!-- Statistics Cards -->
+        <div class="row g-3 mb-4">
+            <!-- Total Jobs -->
+            <div class="col-md-4">
+                <div class="job-details-card stats-card" style="padding: 25px; text-align: center;">
+                    <div class="stats-icon" style="color: #2ea043; font-size: 2.5rem; margin-bottom: 10px;">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </div>
+                    <h3 class="stats-number" style="color: #ffffff; font-size: 2rem; margin-bottom: 5px;">@ViewBag.TotalJobs</h3>
+                    <p style="color: #8b949e; margin: 0;">Total Jobs Posted</p>
+                    <small style="color: #2ea043; font-weight: 600;">@ViewBag.ActiveJobs Active</small>
+                </div>
+            </div>
+
+            <!-- Total Applications -->
+            <div class="col-md-4">
+                <div class="job-details-card stats-card" style="padding: 25px; text-align: center;">
+                    <div class="stats-icon" style="color: #388bfd; font-size: 2.5rem; margin-bottom: 10px;">
+                        <i class="bi bi-file-earmark-text-fill"></i>
+                    </div>
+                    <h3 class="stats-number" style="color: #ffffff; font-size: 2rem; margin-bottom: 5px;">@ViewBag.TotalApplications</h3>
+                    <p style="color: #8b949e; margin: 0;">Total Applications</p>
+                    <small style="color: #388bfd; font-weight: 600;">@ViewBag.PendingApplications Pending</small>
+                </div>
+            </div>
+
+            <!-- Acceptance Rate -->
+            <div class="col-md-4">
+                <div class="job-details-card stats-card" style="padding: 25px; text-align: center;">
+                    <div class="stats-icon" style="color: #fbbc05; font-size: 2.5rem; margin-bottom: 10px;">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    @{
+                        var acceptanceRate = ViewBag.TotalApplications > 0 
+                            ? Math.Round((double)ViewBag.AcceptedApplications / ViewBag.TotalApplications * 100, 1) 
+                            : 0;
+                    }
+                    <h3 class="stats-number" style="color: #ffffff; font-size: 2rem; margin-bottom: 5px;">@acceptanceRate%</h3>
+                    <p style="color: #8b949e; margin: 0;">Acceptance Rate</p>
+                    <small style="color: #2ea043; font-weight: 600;">@ViewBag.AcceptedApplications Accepted</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-3 mb-4">
+            <!-- Application Status Chart -->
+            <div class="col-md-6">
+                <div class="job-details-card chart-card" style="padding: 25px;">
+                    <h5 style="color: #ffffff; margin-bottom: 20px;">
+                        <i class="bi bi-pie-chart-fill" style="color: #2ea043;"></i> Application Status Distribution
+                    </h5>
+                    <div class="chart-container">
+                        <canvas id="applicationStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jobs Status Chart -->
+            <div class="col-md-6">
+                <div class="job-details-card chart-card" style="padding: 25px;">
+                    <h5 style="color: #ffffff; margin-bottom: 20px;">
+                        <i class="bi bi-bar-chart-fill" style="color: #388bfd;"></i> Jobs Overview
+                    </h5>
+                    <div class="chart-container">
+                        <canvas id="jobsStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Application Status Overview -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="job-details-card" style="padding: 20px;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 style="color: #8b949e; margin-bottom: 5px; font-size: 0.9rem;">Pending</h6>
+                            <h3 style="color: #388bfd; font-size: 1.8rem; margin: 0;">@ViewBag.PendingApplications</h3>
+                        </div>
+                        <div style="background: rgba(56, 139, 253, 0.2); padding: 15px; border-radius: 50%;">
+                            <i class="bi bi-clock-history" style="font-size: 1.5rem; color: #388bfd;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="job-details-card" style="padding: 20px;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 style="color: #8b949e; margin-bottom: 5px; font-size: 0.9rem;">Accepted</h6>
+                            <h3 style="color: #2ea043; font-size: 1.8rem; margin: 0;">@ViewBag.AcceptedApplications</h3>
+                        </div>
+                        <div style="background: rgba(46, 160, 67, 0.2); padding: 15px; border-radius: 50%;">
+                            <i class="bi bi-check-circle-fill" style="font-size: 1.5rem; color: #2ea043;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="job-details-card" style="padding: 20px;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 style="color: #8b949e; margin-bottom: 5px; font-size: 0.9rem;">Rejected</h6>
+                            <h3 style="color: #f85149; font-size: 1.8rem; margin: 0;">@ViewBag.RejectedApplications</h3>
+                        </div>
+                        <div style="background: rgba(248, 81, 73, 0.2); padding: 15px; border-radius: 50%;">
+                            <i class="bi bi-x-circle-fill" style="font-size: 1.5rem; color: #f85149;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="job-details-card" style="padding: 25px;">
+                    <h5 style="color: #ffffff; margin-bottom: 20px;">
+                        <i class="bi bi-lightning-fill" style="color: #fbbc05;"></i> Quick Actions
+                    </h5>
+                    <div class="d-flex flex-column gap-2">
+                        <a asp-controller="Employer" asp-action="Applicants" class="btn-job btn-job-apply" style="justify-content: center;">
+                            <i class="bi bi-people"></i> View All Applicants
+                        </a>
+                        <a asp-controller="Job" asp-action="Create" class="btn-job btn-job-view" style="justify-content: center;">
+                            <i class="bi bi-plus-circle"></i> Post New Job
+                        </a>
+                        <a asp-controller="Job" asp-action="ManageJobs" class="btn-job btn-job-view" style="justify-content: center;">
+                            <i class="bi bi-briefcase"></i> Manage My Jobs
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Applications -->
+            <div class="col-md-6">
+                <div class="job-details-card" style="padding: 25px;">
+                    <h5 style="color: #ffffff; margin-bottom: 20px;">
+                        <i class="bi bi-clock-history" style="color: #388bfd;"></i> Recent Applications
+                    </h5>
+                    @if (ViewBag.RecentApplications != null && ViewBag.RecentApplications.Count > 0)
+                    {
+                        <div class="d-flex flex-column gap-2">
+                            @foreach (var app in ViewBag.RecentApplications)
+                            {
+                                <div style="padding: 12px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border-left: 3px solid @(app.Status == "Pending" ? "#388bfd" : app.Status == "Accepted" ? "#2ea043" : "#f85149");">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong style="color: #ffffff; font-size: 0.95rem;">@app.ApplicantName</strong>
+                                            <p style="color: #8b949e; margin: 3px 0; font-size: 0.85rem;">@app.JobTitle</p>
+                                            <small style="color: #6b7280; font-size: 0.8rem;">
+                                                <i class="bi bi-calendar3"></i> @app.ApplicationDate.ToString("MMM dd, yyyy")
+                                            </small>
+                                        </div>
+                                        <span class="job-badge" style="background: rgba(@(app.Status == "Pending" ? "56, 139, 253" : app.Status == "Accepted" ? "46, 160, 67" : "248, 81, 73"), 0.15); color: @(app.Status == "Pending" ? "#388bfd" : app.Status == "Accepted" ? "#2ea043" : "#f85149"); border: 1px solid rgba(@(app.Status == "Pending" ? "56, 139, 253" : app.Status == "Accepted" ? "46, 160, 67" : "248, 81, 73"), 0.3); font-size: 0.75rem;">
+                                            @app.Status
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p style="color: #8b949e; text-align: center; padding: 20px 0;">No recent applications</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <script>
+        // Application Status Pie Chart
+        const applicationStatusCtx = document.getElementById('applicationStatusChart');
+        const applicationStatusChart = new Chart(applicationStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Accepted', 'Rejected'],
+                datasets: [{
+                    data: [@ViewBag.PendingApplications, @ViewBag.AcceptedApplications, @ViewBag.RejectedApplications],
+                    backgroundColor: [
+                        'rgba(56, 139, 253, 0.8)',
+                        'rgba(46, 160, 67, 0.8)',
+                        'rgba(248, 81, 73, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(56, 139, 253, 1)',
+                        'rgba(46, 160, 67, 1)',
+                        'rgba(248, 81, 73, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#c9d1d9',
+                            padding: 15,
+                            font: {
+                                size: 12,
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(22, 27, 34, 0.95)',
+                        titleColor: '#f0f6fc',
+                        bodyColor: '#c9d1d9',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.parsed || 0;
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                return label + ': ' + value + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Jobs Status Bar Chart
+        const jobsStatusCtx = document.getElementById('jobsStatusChart');
+        const jobsStatusChart = new Chart(jobsStatusCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Jobs', 'Active Jobs', 'Inactive Jobs'],
+                datasets: [{
+                    label: 'Jobs',
+                    data: [@ViewBag.TotalJobs, @ViewBag.ActiveJobs, @(ViewBag.TotalJobs - ViewBag.ActiveJobs)],
+                    backgroundColor: [
+                        'rgba(46, 160, 67, 0.8)',
+                        'rgba(35, 134, 54, 0.8)',
+                        'rgba(139, 148, 158, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(46, 160, 67, 1)',
+                        'rgba(35, 134, 54, 1)',
+                        'rgba(139, 148, 158, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(22, 27, 34, 0.95)',
+                        titleColor: '#f0f6fc',
+                        bodyColor: '#c9d1d9',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#8b949e',
+                            font: {
+                                size: 11,
+                                family: "'Inter', sans-serif"
+                            },
+                            stepSize: 1
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#8b949e',
+                            font: {
+                                size: 11,
+                                family: "'Inter', sans-serif"
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Animate numbers on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const statsNumbers = document.querySelectorAll('.stats-number');
+            statsNumbers.forEach(stat => {
+                const finalValue = parseInt(stat.textContent);
+                if (!isNaN(finalValue)) {
+                    animateValue(stat, 0, finalValue, 1000);
+                }
+            });
+        });
+
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentValue = Math.floor(progress * (end - start) + start);
+                element.textContent = currentValue + (element.textContent.includes('%') ? '%' : '');
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    </script>
+}

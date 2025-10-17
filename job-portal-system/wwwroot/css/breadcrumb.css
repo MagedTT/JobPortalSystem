@@ -1,0 +1,113 @@
+/* ========================================
+   Breadcrumb Navigation Styles
+   ======================================== */
+
+.breadcrumb-nav {
+    background: linear-gradient(135deg, rgba(22, 27, 34, 0.95) 0%, rgba(13, 17, 23, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.breadcrumb {
+    margin-bottom: 0;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: #8b949e;
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-item i {
+    font-size: 1rem;
+    color: #2ea043;
+}
+
+.breadcrumb-item span {
+    font-weight: 500;
+}
+
+.breadcrumb-item a {
+    color: #8b949e;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: #2ea043;
+    background: rgba(46, 160, 67, 0.1);
+}
+
+.breadcrumb-item a i {
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-item a:hover i {
+    color: #3fb950;
+}
+
+.breadcrumb-item.active {
+    color: #f0f6fc;
+    font-weight: 600;
+}
+
+.breadcrumb-item.active i {
+    color: #3fb950;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.2rem;
+    font-weight: 300;
+    padding: 0 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .breadcrumb-nav {
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb-item {
+        font-size: 0.85rem;
+    }
+
+    .breadcrumb-item i {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animation on page load */
+.breadcrumb-nav {
+    animation: breadcrumbFadeIn 0.3s ease-out;
+}
+
+@keyframes breadcrumbFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

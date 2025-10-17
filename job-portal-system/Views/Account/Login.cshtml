@@ -4,101 +4,172 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="container mt-5" style="max-width: 450px;">
-    <div class="card shadow rounded-4 border-0">
-        <div class="card-body p-4">
-            <h3 class="text-center mb-4">Login to Your Account</h3>
+<link rel="stylesheet" href="~/css/pages/auth.css" />
 
-            <!-- Tabs -->
-            <ul class="nav nav-tabs mb-3" id="loginTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="admin-tab" data-bs-toggle="tab" type="button">Admin</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="employer-tab" data-bs-toggle="tab" type="button">Employer</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="jobseeker-tab" data-bs-toggle="tab" type="button">Job Seeker</button>
-                </li>
-            </ul>
-
-            <!-- Login Form -->
-            <form asp-action="Login" method="post" novalidate>
-                <div class="form-group mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+<div class="auth-section">
+    <div class="auth-container">
+        <!-- Left Side - Branding -->
+        <div class="auth-branding">
+            <div class="branding-content">
+                <div class="logo-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+                        <defs>
+                            <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                                <stop offset="0" stop-color="#238636"/>
+                                <stop offset="1" stop-color="#2ea043"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="32" cy="32" r="20" fill="url(#g1)" opacity="0.12"/>
+                        <circle cx="32" cy="32" r="16" fill="url(#g1)"/>
+                        <g transform="translate(0,0)">
+                            <rect x="23.6" y="27.8" width="16.8" height="8.4" rx="1.2" ry="1.2" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+                            <path d="M27.2 26.4 h9.6 a1.2 1.2 0 0 1 1.2 1.2 v0.4" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+                            <rect x="30.6" y="30.6" width="2.8" height="3.2" rx="0.6" fill="#ffffff"/>
+                        </g>
+                    </svg>
                 </div>
-
-                <div class="form-group mb-4">
-                    <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" class="form-control" placeholder="Enter your password" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill">Login</button>
-
-                <div class="text-center mt-2">
-                    <div class="mb-1">
-                        <a asp-action="ForgotPassword" class="text-decoration-none small text-muted">Forgot your password?</a>
+                <h1 class="branding-title">Welcome to <span class="gradient-text">Jobverse</span></h1>
+                <p class="branding-subtitle">Your gateway to endless career opportunities</p>
+                <div class="branding-features">
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Thousands of job listings</span>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center gap-2 mt-2 flex-wrap">
-                        <span class="small text-muted">Don’t have an account?</span>
-                        <a asp-action="RegisterJobSeeker" class="btn btn-outline-secondary btn-sm rounded-pill py-1">Job Seeker</a>
-                        <a asp-action="RegisterEmployeer" class="btn btn-outline-secondary btn-sm rounded-pill py-1">Employer</a>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Top companies hiring</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Secure & trusted platform</span>
                     </div>
                 </div>
-            </form>
+            </div>
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="auth-form-wrapper">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2 class="auth-title">Sign In</h2>
+                    <p class="auth-subtitle">Choose your account type to continue</p>
+                </div>
+
+                <!-- Role Tabs -->
+                <div class="role-tabs">
+                    <button class="role-tab active" id="admin-tab" data-role="Admin">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Admin</span>
+                    </button>
+                    <button class="role-tab" id="employer-tab" data-role="Employer">
+                        <i class="bi bi-building"></i>
+                        <span>Employer</span>
+                    </button>
+                    <button class="role-tab" id="jobseeker-tab" data-role="Job Seeker">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Job Seeker</span>
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <form asp-action="Login" method="post" class="auth-form" novalidate>
+                    <div class="form-group-auth">
+                        <label asp-for="Email" class="form-label-auth">
+                            <i class="bi bi-envelope"></i> Email Address
+                        </label>
+                        <input asp-for="Email" type="email" class="form-input-auth" placeholder="your.email@example.com" autocomplete="email" />
+                        <span asp-validation-for="Email" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-group-auth">
+                        <label asp-for="Password" class="form-label-auth">
+                            <i class="bi bi-lock"></i> Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input asp-for="Password" type="password" class="form-input-auth" id="passwordField" placeholder="Enter your password" autocomplete="current-password" />
+                            <button type="button" class="password-toggle" id="togglePassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="validation-message-auth"></span>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="rememberMe" />
+                            <span>Remember me</span>
+                        </label>
+                        <a asp-action="ForgotPassword" class="forgot-link">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <button type="submit" class="btn-auth btn-auth-primary">
+                        <span>Sign In</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+
+                    <div class="auth-footer">
+                        <p class="footer-text">Don't have an account?</p>
+                        <div class="register-buttons">
+                            <a asp-action="RegisterJobSeeker" class="btn-register">
+                                <i class="bi bi-person-plus"></i>
+                                <span>Register as Job Seeker</span>
+                            </a>
+                            <a asp-action="RegisterEmployer" class="btn-register">
+                                <i class="bi bi-building-add"></i>
+                                <span>Register as Employer</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<style>
-    #loginTabs{
-        border-bottom: 1px solid #28a745 !important;
-    }
-    #loginTabs .nav-link {
-        color: #155724;  
-    }
-
-        #loginTabs .nav-link.active {
-            background-color: #218838;
-            color: #fff;
-            border-color: #218838;
-            border-bottom:0;
-        }
-
-        #loginTabs .nav-link:hover {
-            background-color: #155724;
-            color: white;
-            border-color: #155724;
-        }
-</style>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        const emailInput = document.getElementById("Email");
-        const passwordInput = document.getElementById("Password");
+        // Role tabs functionality
+        const tabs = document.querySelectorAll('.role-tab');
+        const emailInput = document.getElementById('Email');
+        const passwordInput = document.getElementById('passwordField');
 
         const credentials = {
-            "admin-tab": { email: "admin@jobverse.com", password: "Admin123!" },
-            "employer-tab": { email: "employer1@jobverse.com", password: "Employer123!" },
-            "jobseeker-tab": { email: "jobseeker1@jobverse.com", password: "JobSeeker123!" }
+            'admin-tab': { email: 'admin@jobverse.com', password: 'Admin123!' },
+            'employer-tab': { email: 'employer1@jobverse.com', password: 'Employer123!' },
+            'jobseeker-tab': { email: 'jobseeker1@jobverse.com', password: 'JobSeeker123!' }
         };
 
-        const tabs = document.querySelectorAll("#loginTabs button");
         tabs.forEach(tab => {
-            tab.addEventListener("click", function () {
-                const creds = credentials[tab.id];
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const creds = credentials[this.id];
                 emailInput.value = creds.email;
                 passwordInput.value = creds.password;
             });
         });
 
-        window.addEventListener("DOMContentLoaded", () => {
-            emailInput.value = credentials["admin-tab"].email;
-            passwordInput.value = credentials["admin-tab"].password;
+        // Set default credentials
+        window.addEventListener('DOMContentLoaded', () => {
+            emailInput.value = credentials['admin-tab'].email;
+            passwordInput.value = credentials['admin-tab'].password;
+        });
+
+        // Password toggle
+        const togglePassword = document.getElementById('togglePassword');
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.querySelector('i').classList.toggle('bi-eye');
+            this.querySelector('i').classList.toggle('bi-eye-slash');
         });
     </script>
 }

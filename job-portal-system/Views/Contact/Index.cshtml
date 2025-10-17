@@ -1,0 +1,157 @@
+@model job_portal_system.Models.ViewModels.ContactViewModel
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<link href="~/css/pages/jobs.css" rel="stylesheet" />
+
+<div class="jobs-page">
+    <div class="container" style="max-width: 900px; padding-top: 80px;">
+        <!-- Page Header -->
+        <div class="jobs-header" style="text-align: center; margin-bottom: 40px;">
+            <h1>
+                <span style="background: linear-gradient(135deg, #238636 0%, #2ea043 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Contact Us</span>
+            </h1>
+            <p>Have a question or feedback? We'd love to hear from you!</p>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success" style="background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.3); color: #2ea043; border-radius: 10px; margin-bottom: 30px;">
+                <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger" style="background: rgba(248, 81, 73, 0.15); border: 1px solid rgba(248, 81, 73, 0.3); color: #f85149; border-radius: 10px; margin-bottom: 30px;">
+                <i class="bi bi-exclamation-circle-fill"></i> @TempData["Error"]
+            </div>
+        }
+
+        <!-- Contact Form Card -->
+        <div class="job-details-card" style="padding: 40px;">
+            <!-- Contact Info Section -->
+            <div class="row mb-4">
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <div style="background: rgba(46, 160, 67, 0.1); padding: 20px; border-radius: 12px; height: 100%;">
+                        <i class="bi bi-envelope-fill" style="font-size: 2.5rem; color: #2ea043; margin-bottom: 10px;"></i>
+                        <h5 style="color: #ffffff; margin-bottom: 5px;">Email</h5>
+                        <p style="color: #8b949e; margin: 0; font-size: 0.9rem;">support@jobverse.com</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <div style="background: rgba(56, 139, 253, 0.1); padding: 20px; border-radius: 12px; height: 100%;">
+                        <i class="bi bi-telephone-fill" style="font-size: 2.5rem; color: #388bfd; margin-bottom: 10px;"></i>
+                        <h5 style="color: #ffffff; margin-bottom: 5px;">Phone</h5>
+                        <p style="color: #8b949e; margin: 0; font-size: 0.9rem;">+1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div style="background: rgba(251, 188, 5, 0.1); padding: 20px; border-radius: 12px; height: 100%;">
+                        <i class="bi bi-geo-alt-fill" style="font-size: 2.5rem; color: #fbbc05; margin-bottom: 10px;"></i>
+                        <h5 style="color: #ffffff; margin-bottom: 5px;">Location</h5>
+                        <p style="color: #8b949e; margin: 0; font-size: 0.9rem;">New York, USA</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 30px 0;" />
+
+            <!-- Contact Form -->
+            <form asp-action="Index" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Name" class="form-label" style="color: #c9d1d9; font-weight: 600; margin-bottom: 8px;">
+                            <i class="bi bi-person"></i> Your Name *
+                        </label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter your full name" 
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px; border-radius: 8px;" />
+                        <span asp-validation-for="Name" class="text-danger" style="font-size: 0.85rem;"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Email" class="form-label" style="color: #c9d1d9; font-weight: 600; margin-bottom: 8px;">
+                            <i class="bi bi-envelope"></i> Email Address *
+                        </label>
+                        <input asp-for="Email" class="form-control" placeholder="your.email@example.com" 
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px; border-radius: 8px;" />
+                        <span asp-validation-for="Email" class="text-danger" style="font-size: 0.85rem;"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Phone" class="form-label" style="color: #c9d1d9; font-weight: 600; margin-bottom: 8px;">
+                            <i class="bi bi-telephone"></i> Phone Number
+                        </label>
+                        <input asp-for="Phone" class="form-control" placeholder="+1 (555) 123-4567" 
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px; border-radius: 8px;" />
+                        <span asp-validation-for="Phone" class="text-danger" style="font-size: 0.85rem;"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Subject" class="form-label" style="color: #c9d1d9; font-weight: 600; margin-bottom: 8px;">
+                            <i class="bi bi-tag"></i> Subject *
+                        </label>
+                        <input asp-for="Subject" class="form-control" placeholder="What is this about?" 
+                               style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px; border-radius: 8px;" />
+                        <span asp-validation-for="Subject" class="text-danger" style="font-size: 0.85rem;"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Message" class="form-label" style="color: #c9d1d9; font-weight: 600; margin-bottom: 8px;">
+                        <i class="bi bi-chat-left-text"></i> Your Message *
+                    </label>
+                    <textarea asp-for="Message" class="form-control" rows="6" placeholder="Tell us more about your inquiry..." 
+                              style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; padding: 12px; border-radius: 8px; resize: vertical;"></textarea>
+                    <span asp-validation-for="Message" class="text-danger" style="font-size: 0.85rem;"></span>
+                    <small style="color: #8b949e; display: block; margin-top: 5px;">
+                        <i class="bi bi-info-circle"></i> Minimum 10 characters, maximum 2000 characters
+                    </small>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center" style="margin-top: 30px;">
+                    <small style="color: #8b949e;">
+                        <i class="bi bi-asterisk" style="font-size: 0.6rem;"></i> Required fields
+                    </small>
+                    <button type="submit" class="btn-job btn-job-apply" style="padding: 12px 40px;">
+                        <i class="bi bi-send-fill"></i> Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Additional Info Section -->
+        <div class="row mt-4" style="margin-bottom: 40px;">
+            <div class="col-md-6 mb-3">
+                <div class="job-details-card" style="padding: 25px;">
+                    <h5 style="color: #ffffff; margin-bottom: 15px;">
+                        <i class="bi bi-clock-fill" style="color: #2ea043;"></i> Business Hours
+                    </h5>
+                    <div style="color: #8b949e; line-height: 1.8;">
+                        <p style="margin: 5px 0;"><strong style="color: #c9d1d9;">Monday - Friday:</strong> 9:00 AM - 6:00 PM</p>
+                        <p style="margin: 5px 0;"><strong style="color: #c9d1d9;">Saturday:</strong> 10:00 AM - 4:00 PM</p>
+                        <p style="margin: 5px 0;"><strong style="color: #c9d1d9;">Sunday:</strong> Closed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="job-details-card" style="padding: 25px;">
+                    <h5 style="color: #ffffff; margin-bottom: 15px;">
+                        <i class="bi bi-question-circle-fill" style="color: #388bfd;"></i> Need Help?
+                    </h5>
+                    <p style="color: #8b949e; margin-bottom: 15px;">Check out our frequently asked questions or reach out directly.</p>
+                    <a href="#" class="btn-job btn-job-view" style="display: inline-flex;">
+                        <i class="bi bi-book"></i> Visit FAQ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
